@@ -1,4 +1,4 @@
 package MovieCategory;
 
-public class Musical {
+public class Musical extends MovieCategory{
 }

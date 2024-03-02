@@ -1,4 +1,4 @@
 package MovieCategory;
 
-public class Documentary {
+public class Documentary extends MovieCategory{
 }

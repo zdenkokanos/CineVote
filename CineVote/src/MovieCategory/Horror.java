@@ -1,4 +1,4 @@
 package MovieCategory;
 
-public class Horror {
+public class Horror extends MovieCategory{
 }

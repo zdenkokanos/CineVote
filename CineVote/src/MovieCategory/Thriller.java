@@ -1,4 +1,4 @@
 package MovieCategory;
 
-public class Thriller {
+public class Thriller extends MovieCategory {
 }

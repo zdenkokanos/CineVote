@@ -1,4 +1,4 @@
 package MovieCategory;
 
-public class Action {
+public class Action extends MovieCategory{
 }

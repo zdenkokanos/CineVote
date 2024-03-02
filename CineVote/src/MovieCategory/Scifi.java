@@ -1,4 +1,4 @@
 package MovieCategory;
 
-public class Scifi {
+public class Scifi extends MovieCategory{
 }
