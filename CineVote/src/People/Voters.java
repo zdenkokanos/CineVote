@@ -1,7 +1,9 @@
 package People;
 
 public class Voters{
-    String username;
+    private String username;
+    private String password;
+    boolean voted;
     public static void vote(){
         System.out.println("I voted!");
     }

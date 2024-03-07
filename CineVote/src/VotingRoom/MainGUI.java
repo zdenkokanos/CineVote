@@ -1,15 +1,12 @@
 package VotingRoom;
 
-import People.MiddleClass;
 import javafx.application.Application;
-import javafx.application.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
-import javafx.event.*;
 
-public class Main extends Application {
+public class MainGUI extends Application {
 
     private Button voteButton = new Button("Vote");
     private TextArea output = new TextArea();
