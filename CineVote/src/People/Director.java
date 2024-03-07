@@ -1,4 +1,9 @@
 package People;
-import VotingRoom.*;
-public class Director extends Movie {
+
+import MovieCategory.MovieCategory;
+
+public class Director {
+    String name;
+    int age;
+    MovieCategory movieCategory;
 }

@@ -1,6 +1,9 @@
 package People;
 
-import VotingRoom.*;
+import MovieCategory.MovieCategory;
 
-public class Actor extends Movie {
+public class Actor {
+    String name;
+    int age;
+    MovieCategory movieCategory;
 }
