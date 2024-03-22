@@ -26,6 +26,9 @@ public class Voters implements VotingProcess, Serializable{
         return password;
     }
 
+    public boolean getVoted(){
+        return voted;
+    }
     public void voted(){
         this.voted = true;
     }

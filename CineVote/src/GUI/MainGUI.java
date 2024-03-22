@@ -58,7 +58,12 @@ public class MainGUI extends Application {
             for (Voters voter : votingRoom.getVoters()) {
                 // Check if the entered username and password match the voter's credentials
                 if (voter.getUsername().equals(usernameInput.getText()) && voter.getPassword().equals(passwordInput.getText())) {
-                    switchToVotingScene(primaryStage, voter); // If match found, switch to voting scene
+                    if(voter.getVoted()==true){
+                        switchToAlreadyVoted(primaryStage);
+                    }
+                    else{
+                        switchToVotingScene(primaryStage, voter); // If match found, switch to voting scene
+                    }
                     return; // Exit the loop since a match is found
                 }
             }
@@ -123,6 +128,19 @@ public class MainGUI extends Application {
         vbox.getChildren().add(thankYouLabel);
 
         stage.setScene(thankYouScene); // Switch to Thank You scene
+    }
+
+    public void switchToAlreadyVoted(Stage stage) {
+        VBox vbox = new VBox();
+        vbox.setAlignment(Pos.CENTER);
+        Scene alreadyVotedScene = new Scene(vbox, 500, 500, Color.BLACK);
+        alreadyVotedScene.getStylesheets().add(css);
+        Label alreadyVotedLabel = new Label("You voted already!");
+        alreadyVotedLabel.setId("thankYou");
+
+        vbox.getChildren().add(alreadyVotedLabel);
+
+        stage.setScene(alreadyVotedScene); // Switch to Thank You scene
     }
 
     public static void main(String[] args) {
