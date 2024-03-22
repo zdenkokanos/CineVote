@@ -1,9 +1,12 @@
 package People;
 
-import MovieCategory.MovieCategory;
-
 public class Actor {
     String name;
     int age;
-    MovieCategory movieCategory;
+
+    public Actor(String name, int age){
+        this.name = name;
+        this.age = age;
+
+    }
 }

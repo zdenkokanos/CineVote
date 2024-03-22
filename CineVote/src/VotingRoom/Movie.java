@@ -1,17 +1,32 @@
 package VotingRoom;
 
-import People.Actor;
+import People.*;
 import People.Director;
 
-public class Movie {
-    String title;
-    Director director;
-    Actor mainActor;
-    int year;
 
-    public Movie(String title, Director director, int year) {
+public class Movie {
+    private String title;
+    private Director director;
+    private Actor mainActor;
+    private int year;
+
+    private int votes;
+
+    public Movie(String title, Director director, Actor mainActor, int year) {
         this.title = title;
         this.director = director;
+        this.mainActor = mainActor;
         this.year = year;
     }
+    public String getTitle() {
+        return title;
+    }
+    public void vote(){
+        this.votes++;
+    }
+    public int getVotes(){
+        return votes;
+    }
 }
+
+
