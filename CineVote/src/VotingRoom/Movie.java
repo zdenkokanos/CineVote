@@ -21,8 +21,8 @@ public class Movie {
     public String getTitle() {
         return title;
     }
-    public void vote(){
-        this.votes++;
+    public void addvote(int weight){
+        this.votes+=weight;
     }
     public int getVotes(){
         return votes;

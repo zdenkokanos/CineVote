@@ -1,7 +1,13 @@
-package People;
+package Voters;
 
 public class Admin extends Voters {
+
+    public Admin(String username, String password){
+        super(username, password);
+    }
+
     public static void vote() {
+
     }
 
     public void nominate() {
