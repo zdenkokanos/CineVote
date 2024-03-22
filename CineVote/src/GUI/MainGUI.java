@@ -2,7 +2,6 @@ package GUI;
 
 import VotingRoom.*;
 import Voters.Voters;
-import VotingRoom.VotingRoom;
 import javafx.application.Application;
 import javafx.scene.*;
 import javafx.scene.image.Image;
@@ -23,6 +22,8 @@ public class MainGUI extends Application {
     private TextField usernameInput = new TextField();
     private PasswordField passwordInput = new PasswordField();
 
+    private Button load = new Button("Load");
+
     String css = this.getClass().getResource("main.css").toExternalForm();
 
     public void start(Stage primaryStage) throws Exception {
@@ -30,7 +31,7 @@ public class MainGUI extends Application {
         primaryStage.setTitle("CineVote");
         Image icon = new Image("CineVote.png");
         Group root = new Group();
-        Scene logInScene = new Scene(root, 500, 500, Color.BLACK);
+        Scene logInScene = new Scene(root, 500, 500, Color.GRAY);
         logInScene.getStylesheets().add(css);
         primaryStage.getIcons().add(icon);
         primaryStage.setResizable(false);
@@ -48,6 +49,7 @@ public class MainGUI extends Application {
         gridPane.add(new Label("Password:"), 0, 1);
         gridPane.add(passwordInput, 1, 1);
         gridPane.add(logIn, 1, 2);
+        gridPane.add(load,3,4);
 
         root.getChildren().add(gridPane);
 
@@ -63,34 +65,68 @@ public class MainGUI extends Application {
 
         });
 
-            primaryStage.setScene(logInScene);
-            primaryStage.show(); // Shows the stage
-        }
+        load.setOnAction(e->votingRoom.loadVotingRoom());
 
-        private void switchToVotingScene (Stage stage, Voters voter){
-            FlowPane pane = new FlowPane();
-            Scene VotingScene = new Scene(pane, 500, 500, Color.GRAY);
-
-            // Display movies from VotingRoom
-            List<Movie> movies = votingRoom.getMovies();
-            for (Movie movie : movies) {
-                Label movieLabel = new Label(movie.getTitle());
-                Label movieVote = new Label(String.valueOf(movie.getVotes()));
-                Button voteButton = new Button("Vote");
-                voteButton.setOnAction(e -> {
-                    voter.vote(movie);
-                    movieVote.setText(String.valueOf(movie.getVotes()));
-                }); // Handle voting action
-                VBox movieBox = new VBox(movieLabel, voteButton, movieVote);
-                pane.getChildren().add(movieBox);
-            }
-
-            stage.setScene(VotingScene); // Switch to voting scene
-        }
-
-
-        public static void main (String[]args){
-            launch(args);
-        }
-
+        primaryStage.setScene(logInScene);
+        primaryStage.show(); // Shows the stage
     }
+
+    private void switchToVotingScene(Stage stage, Voters voter) {
+
+        FlowPane pane = new FlowPane();
+        ToggleGroup toggleGroup = new ToggleGroup();
+        Scene VotingScene = new Scene(pane, 500, 500, Color.GRAY);
+
+        // Display movies from VotingRoom
+        List<Movie> movies = votingRoom.getMovies();
+        int i = 0;
+        for(Movie movie: movies){
+            System.out.println(i+": "+ movie.getTitle()+"/////"+ movie.getVotes());
+            i++;
+        }
+        for (Movie movie : movies) {
+            RadioButton radioButton = new RadioButton(movie.getTitle());
+            radioButton.setToggleGroup(toggleGroup);
+            VBox movieBox = new VBox(vote, radioButton);
+            pane.getChildren().add(movieBox);
+            radioButton.setUserData(movie);
+        }
+
+        vote.setOnAction(e -> {
+            RadioButton selectedRadioButton = (RadioButton) toggleGroup.getSelectedToggle();
+            if (selectedRadioButton != null) {
+                Movie selectedMovie = (Movie) selectedRadioButton.getUserData();
+                voter.vote(selectedMovie);
+                System.out.println("Selected movie: " + selectedMovie.getTitle()+"\n***********************");
+                switchToThankYou(stage);
+                votingRoom.saveVotingRoom();
+                int j = 0;
+                for(Movie movie: movies){
+                    System.out.println(j+": "+ movie.getTitle()+ "/////"+ movie.getVotes());
+                    j++;
+                }
+            } else {
+                System.out.println("No movie selected.");
+            }
+        });
+        stage.setScene(VotingScene); // Switch to voting scene
+    }
+
+    public void switchToThankYou(Stage stage) {
+        VBox vbox = new VBox();
+        vbox.setAlignment(Pos.CENTER);
+        Scene thankYouScene = new Scene(vbox, 500, 500, Color.LIGHTGRAY);
+        thankYouScene.getStylesheets().add(css);
+        Label thankYouLabel = new Label("Thank you for your time!");
+        thankYouLabel.setId("thankYou");
+
+        vbox.getChildren().add(thankYouLabel);
+
+        stage.setScene(thankYouScene); // Switch to Thank You scene
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+}

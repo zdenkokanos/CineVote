@@ -1,5 +1,5 @@
 package VotingRoom;
 
 public interface VotingProcess {
-     void vote();
+     void vote(Movie movie);
 }

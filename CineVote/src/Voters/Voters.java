@@ -1,7 +1,9 @@
 package Voters;
 import VotingRoom.*;
 
-public class Voters{
+import java.io.*;
+
+public class Voters implements VotingProcess, Serializable{
     private String username;
     private String password;
     private boolean voted;
@@ -12,8 +14,8 @@ public class Voters{
         this.password = password;
     }
     public void vote(Movie movie){
-        System.out.println("I voted!");
         movie.addvote(1);
+        voted();
     }
 
     public String getUsername(){
@@ -22,5 +24,9 @@ public class Voters{
 
     public String getPassword(){
         return password;
+    }
+
+    public void voted(){
+        this.voted = true;
     }
 }

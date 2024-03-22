@@ -3,8 +3,10 @@ package VotingRoom;
 import People.*;
 import People.Director;
 
+import java.io.*;
 
-public class Movie {
+
+public class Movie implements Serializable {
     private String title;
     private Director director;
     private Actor mainActor;

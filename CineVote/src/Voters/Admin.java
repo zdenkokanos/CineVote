@@ -6,10 +6,6 @@ public class Admin extends Voters {
         super(username, password);
     }
 
-    public static void vote() {
-
-    }
-
     public void nominate() {
 
     }

@@ -6,7 +6,4 @@ public class LowerClass extends Voters {
         super(username, password);
     }
 
-    public static void vote(){
-
-    }
 }

@@ -8,6 +8,7 @@ public class MovieExpert extends MiddleClass{
     @Override
     public void vote(Movie movie){
         movie.addvote(2);
+        voted();
     }
 
 }

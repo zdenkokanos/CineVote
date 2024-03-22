@@ -1,8 +1,9 @@
 package People;
 
 
+import java.io.Serializable;
 
-public class Director {
+public class Director implements Serializable {
     private String name;
     private int age;
 
