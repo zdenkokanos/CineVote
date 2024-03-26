@@ -1,5 +1,6 @@
 package GUI;
 
+import Voters.*;
 import VotingRoom.VotingRoom;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -14,7 +15,7 @@ public class ExitScene extends Scene {
     private Button continueB = new Button("Continue");
     private Button exitB = new Button("Exit");
 
-    public ExitScene(VotingRoom votingRoom, Stage stage) {
+    public ExitScene(VotingRoom votingRoom, Stage stage, Admin admin) {
         super(new VBox(), 500, 500, Color.LIGHTGRAY);
         VBox vbox = (VBox) getRoot();
         vbox.setAlignment(Pos.CENTER);
@@ -28,7 +29,7 @@ public class ExitScene extends Scene {
             stage.close();
         });
         continueB.setOnAction(e->{
-            AdminScene adminScene = new AdminScene(stage, votingRoom);
+            AdminScene adminScene = new AdminScene(stage, votingRoom, admin);
             stage.setScene(adminScene);
         });
         vbox.getChildren().addAll(messageLabel, continueB, exitB);

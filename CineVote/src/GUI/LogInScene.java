@@ -1,6 +1,6 @@
 package GUI;
 
-import Voters.Voters;
+import Voters.*;
 import Voters.LowerClass;
 import VotingRoom.VotingRoom;
 import javafx.geometry.Pos;
@@ -37,9 +37,6 @@ public class LogInScene extends Scene {
         gridPane.setVgap(10);
         gridPane.setAlignment(Pos.CENTER); // Center the GridPane
 
-        //Insets insets = new Insets(100);
-       // gridPane.setPadding(insets);
-
         gridPane.add(new Label("Username:"), 0, 0);
         gridPane.add(usernameInput, 1, 0);
         gridPane.add(new Label("Password:"), 0, 1);
@@ -55,9 +52,14 @@ public class LogInScene extends Scene {
                 // Check if the entered username and password match the voter's credentials
                 if (voter.getUsername().equals(usernameInput.getText()) && voter.getPassword().equals(passwordInput.getText())) {
                     if (voter.getVoted()) {
-                        if(voter.getUsername().equals("admin")){
-                            AdminScene adminSceen = new AdminScene(primaryStage, votingRoom);
+                        if(voter instanceof Admin){
+                            AdminScene adminSceen = new AdminScene(primaryStage, votingRoom, (Admin)voter);
                             primaryStage.setScene(adminSceen);
+                            break;
+                        }
+                        else if(voter instanceof MiddleClass){
+                            MiddleClassScene middleClassScene = new MiddleClassScene();
+                            primaryStage.setScene(middleClassScene);
                             break;
                         }
                         else{

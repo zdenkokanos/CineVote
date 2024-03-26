@@ -1,5 +1,7 @@
 package GUI;
 
+import Voters.Admin;
+import Voters.Voters;
 import VotingRoom.VotingRoom;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
@@ -20,7 +22,7 @@ public class AdminScene extends Scene {
     private Button submit = new Button("Submit");
     private String css = this.getClass().getResource("main.css").toExternalForm();
 
-    public AdminScene(Stage stage, VotingRoom votingRoom) {
+    public AdminScene(Stage stage, VotingRoom votingRoom, Admin admin) {
         super(new GridPane(), 500, 500, Color.LIGHTGRAY);
         GridPane gridPane = (GridPane) getRoot();
         gridPane.setAlignment(Pos.CENTER);
@@ -51,9 +53,9 @@ public class AdminScene extends Scene {
             int actorAgeText = Integer.parseInt(actorAge.getText());
             int makeYearText = Integer.parseInt(makeYear.getText());
 
-            votingRoom.addMovie(movieNameText, directorNameText, directorAgeText, actorNameText, actorAgeText, makeYearText);
+            admin.nominate(movieNameText, directorNameText, directorAgeText, actorNameText, actorAgeText, makeYearText, votingRoom);
             votingRoom.saveVotingRoom();
-            ExitScene exitScene = new ExitScene(votingRoom, stage);
+            ExitScene exitScene = new ExitScene(votingRoom, stage, admin);
             stage.setScene(exitScene);
         });
     }

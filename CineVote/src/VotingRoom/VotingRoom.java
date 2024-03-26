@@ -15,7 +15,7 @@ public class VotingRoom implements Serializable {
     public VotingRoom() {
         movies = new ArrayList<>();
         voters = new ArrayList<>();
-        nominatedMovies = new ArrayList<>();
+        nominatedMovies = new ArrayList<>(); //movies which were nominated to be accepted by admin
         populateMovies();
         makeVoters();
     }
@@ -48,9 +48,10 @@ public class VotingRoom implements Serializable {
         return voters;
     }
 
-    public void addMovie(String movieName, String directorName, int directorAge, String actorName, int actorAge, int makeYear){
-        movies.add(new Movie(movieName, new Director(directorName, directorAge), new Actor(actorName, actorAge), makeYear));
+    public void addMovie(Movie movie){
+        movies.add(movie);
     }
+
 
     public void addVoter(LowerClass voter){
         voters.add(voter);
