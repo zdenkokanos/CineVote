@@ -3,7 +3,7 @@ import VotingRoom.*;
 
 import java.io.*;
 
-public class Voters implements VotingProcess, Serializable{
+public abstract class Voters implements VotingProcess, Serializable{
     private String username;
     private String password;
     private boolean voted;

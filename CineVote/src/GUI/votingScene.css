@@ -1,0 +1,27 @@
+/* Styles for the VotingScene */
+.flow-pane {
+    -fx-padding: 20;
+    -fx-alignment: center;
+}
+
+.button {
+    -fx-font-size: 14px;
+    -fx-padding: 8 16;
+    -fx-background-color: #4CAF50; /* Green */
+    -fx-text-fill: white;
+    -fx-border-radius: 4;
+}
+
+.button:hover{
+    -fx-background-color: red;
+}
+
+.radio-button {
+    -fx-font-size: 14px;
+    -fx-padding: 6;
+}
+
+.v-box {
+    -fx-spacing: 8;
+    -fx-alignment: center;
+}

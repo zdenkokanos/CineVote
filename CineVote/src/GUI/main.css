@@ -1,9 +1,17 @@
 #logInButton{
-    -fx-background-color: red;
+    -fx-background-color: #4CAF50;
     -fx-font-size: 20;
 }
 
 #message{
     -fx-font-size: 24px;
     -fx-font-weight: bold;
+}
+
+.button{
+    -fx-cursor: hand;
+}
+
+.button:hover{
+    -fx-background-color: red;
 }

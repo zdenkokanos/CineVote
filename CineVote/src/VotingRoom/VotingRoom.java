@@ -18,9 +18,16 @@ public class VotingRoom implements Serializable {
     }
 
     public void populateMovies() {
-        movies.add(new Movie("Movie 1", new Director("Director 1", 21), new Actor("Actor 1", 21), 2000));
-        movies.add(new Movie("Movie 2", new Director("Director 2", 45), new Actor("Actor 2", 30), 2005));
-        movies.add(new Movie("Movie 3", new Director("Director 3", 50), new Actor("Actor 3", 25), 2010));
+        movies.add(new Movie("Inception", new Director("Christopher Nolan", 50), new Actor("Leonardo DiCaprio", 45), 2010));
+        movies.add(new Movie("The Shawshank Redemption", new Director("Frank Darabont", 62), new Actor("Tim Robbins", 63), 1994));
+        movies.add(new Movie("The Godfather", new Director("Francis Ford Coppola", 82), new Actor("Marlon Brando", 80), 1972));
+        movies.add(new Movie("Pulp Fiction", new Director("Quentin Tarantino", 58), new Actor("John Travolta", 67), 1994));
+        movies.add(new Movie("The Dark Knight", new Director("Christopher Nolan", 50), new Actor("Christian Bale", 48), 2008));
+        movies.add(new Movie("Schindler's List", new Director("Steven Spielberg", 75), new Actor("Liam Neeson", 69), 1993));
+        movies.add(new Movie("Fight Club", new Director("David Fincher", 59), new Actor("Brad Pitt", 58), 1999));
+        movies.add(new Movie("Forrest Gump", new Director("Robert Zemeckis", 70), new Actor("Tom Hanks", 65), 1994));
+        movies.add(new Movie("The Matrix", new Director("Lana Wachowski", 54), new Actor("Keanu Reeves", 57), 1999));
+        movies.add(new Movie("The Lord of the Rings: The Fellowship of the Ring", new Director("Peter Jackson", 60), new Actor("Elijah Wood", 41), 2001));
     }
 
     public void makeVoters() {
@@ -60,6 +67,5 @@ public class VotingRoom implements Serializable {
             e.printStackTrace();
         }
     }
-
 
 }
