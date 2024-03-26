@@ -57,7 +57,9 @@ public class VotingRoom implements Serializable {
         voters.add(voter);
     }
 
-
+    public void suggestNominaation(Movie movie){
+        nominatedMovies.add(movie);
+    }
 
 
     public void saveVotingRoom() {

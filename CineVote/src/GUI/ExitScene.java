@@ -15,7 +15,7 @@ public class ExitScene extends Scene {
     private Button continueB = new Button("Continue");
     private Button exitB = new Button("Exit");
 
-    public ExitScene(VotingRoom votingRoom, Stage stage, Admin admin) {
+    public ExitScene(VotingRoom votingRoom, Stage stage, Voters voter) {
         super(new VBox(), 500, 500, Color.LIGHTGRAY);
         VBox vbox = (VBox) getRoot();
         vbox.setAlignment(Pos.CENTER);
@@ -24,13 +24,21 @@ public class ExitScene extends Scene {
         Label messageLabel = new Label("Succesfully updated");
         messageLabel.setId("message");
 
-        exitB.setOnAction(e->{
+        exitB.setOnAction(e -> {
             votingRoom.saveVotingRoom();
             stage.close();
         });
-        continueB.setOnAction(e->{
-            AdminScene adminScene = new AdminScene(stage, votingRoom, admin);
-            stage.setScene(adminScene);
+        continueB.setOnAction(e -> {
+            AddMovieScene addMovieScene = new AddMovieScene(stage, votingRoom, voter, "Suggest movie nomination");
+
+            if (voter instanceof Admin)
+            {
+                AdminScene adminScene = new AdminScene(stage, votingRoom, (Admin) voter);
+                stage.setScene(adminScene);
+            } else
+            {
+                stage.setScene(addMovieScene);
+            }
         });
         vbox.getChildren().addAll(messageLabel, continueB, exitB);
     }

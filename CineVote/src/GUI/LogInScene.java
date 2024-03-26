@@ -53,13 +53,13 @@ public class LogInScene extends Scene {
                 if (voter.getUsername().equals(usernameInput.getText()) && voter.getPassword().equals(passwordInput.getText())) {
                     if (voter.getVoted()) {
                         if(voter instanceof Admin){
-                            AdminScene adminSceen = new AdminScene(primaryStage, votingRoom, (Admin)voter);
-                            primaryStage.setScene(adminSceen);
+                            AdminScene adminScene = new AdminScene(primaryStage, votingRoom, (Admin) voter);
+                            primaryStage.setScene(adminScene);
                             break;
                         }
                         else if(voter instanceof MiddleClass){
-                            MiddleClassScene middleClassScene = new MiddleClassScene();
-                            primaryStage.setScene(middleClassScene);
+                            AddMovieScene addMovieScene = new AddMovieScene(primaryStage, votingRoom, voter, "Suggest movie nomination");
+                            primaryStage.setScene(addMovieScene);
                             break;
                         }
                         else{
