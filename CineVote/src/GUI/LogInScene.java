@@ -2,9 +2,7 @@ package GUI;
 
 import Voters.Voters;
 import Voters.LowerClass;
-import Voters.Admin;
 import VotingRoom.VotingRoom;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -17,10 +15,10 @@ import javafx.scene.paint.Color;
 
 public class LogInScene extends Scene {
 
-    private Button logIn = new Button("Log In");
+    private final Button logIn = new Button("Log In");
     private String username;
     private String password;
-    private Button register = new Button("Register");
+    private final Button register = new Button("Register");
     private VotingRoom votingRoom = new VotingRoom();
     private TextField usernameInput = new TextField();
     private PasswordField passwordInput = new PasswordField();
