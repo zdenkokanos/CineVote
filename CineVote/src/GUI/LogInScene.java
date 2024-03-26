@@ -1,6 +1,8 @@
 package GUI;
 
 import Voters.Voters;
+import Voters.LowerClass;
+import Voters.Admin;
 import VotingRoom.VotingRoom;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -16,6 +18,8 @@ import javafx.scene.paint.Color;
 public class LogInScene extends Scene {
 
     private Button logIn = new Button("Log In");
+    private String username;
+    private String password;
     private Button register = new Button("Register");
     private VotingRoom votingRoom = new VotingRoom();
     private TextField usernameInput = new TextField();
@@ -25,7 +29,7 @@ public class LogInScene extends Scene {
     private String css = this.getClass().getResource("main.css").toExternalForm();
     private GridPane gridPane;
 
-    LogInScene(Stage primaryStage) {
+    public LogInScene(Stage primaryStage) {
         super(new GridPane(), 500, 500, Color.BLACK);
         this.gridPane = (GridPane) this.getRoot();
         logIn.setId("logInButton");
@@ -53,7 +57,15 @@ public class LogInScene extends Scene {
                 // Check if the entered username and password match the voter's credentials
                 if (voter.getUsername().equals(usernameInput.getText()) && voter.getPassword().equals(passwordInput.getText())) {
                     if (voter.getVoted()) {
-                        primaryStage.setScene(alreadyVotedScene);
+                        if(voter.getUsername().equals("admin")){
+                            AdminScene adminSceen = new AdminScene(primaryStage, votingRoom);
+                            primaryStage.setScene(adminSceen);
+                            break;
+                        }
+                        else{
+                            primaryStage.setScene(alreadyVotedScene);
+                            break;
+                        }
                     } else {
                         VotingScene votingScene = new VotingScene(votingRoom, voter, primaryStage);
                         primaryStage.setScene(votingScene); // If match found, switch to voting scene
@@ -64,6 +76,15 @@ public class LogInScene extends Scene {
                     errorMessageLabel.setText("Incorrect username or password.");
                 }
             }
+        });
+
+        register.setOnAction(e-> {
+            username = usernameInput.getText();
+            password = passwordInput.getText();
+            LowerClass voter = new LowerClass(username,password);
+            votingRoom.addVoter(voter);
+            VotingScene votingScene = new VotingScene(votingRoom, voter, primaryStage);
+            primaryStage.setScene(votingScene); // If match found, switch to voting scene
         });
 
         load.setOnAction(e -> votingRoom.loadVotingRoom());

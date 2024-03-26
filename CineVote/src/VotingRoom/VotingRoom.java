@@ -10,9 +10,12 @@ public class VotingRoom implements Serializable {
     private List<Movie> movies;
     private List<Voters> voters;
 
+    private List<Movie> nominatedMovies;
+
     public VotingRoom() {
         movies = new ArrayList<>();
         voters = new ArrayList<>();
+        nominatedMovies = new ArrayList<>();
         populateMovies();
         makeVoters();
     }
@@ -31,8 +34,8 @@ public class VotingRoom implements Serializable {
     }
 
     public void makeVoters() {
-        voters.add(new Admin("admin", "admin123"));
-        voters.add(new LowerClass("lower", "lower123"));
+        voters.add(new Admin("admin", "admin"));
+        voters.add(new LowerClass("lower", "lower"));
         voters.add(new MiddleClass("middle", "middle"));
         voters.add(new MovieExpert("movieexpert", "movie"));
     }
@@ -44,6 +47,17 @@ public class VotingRoom implements Serializable {
     public List<Voters> getVoters() {
         return voters;
     }
+
+    public void addMovie(String movieName, String directorName, int directorAge, String actorName, int actorAge, int makeYear){
+        movies.add(new Movie(movieName, new Director(directorName, directorAge), new Actor(actorName, actorAge), makeYear));
+    }
+
+    public void addVoter(LowerClass voter){
+        voters.add(voter);
+    }
+
+
+
 
     public void saveVotingRoom() {
         try (FileOutputStream fileOut = new FileOutputStream("voting.ser");

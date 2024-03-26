@@ -8,7 +8,6 @@ public abstract class Voters implements VotingProcess, Serializable{
     private String password;
     private boolean voted;
 
-
     public Voters(String username, String password){
         this.username = username;
         this.password = password;
