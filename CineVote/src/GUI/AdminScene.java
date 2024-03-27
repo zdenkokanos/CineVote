@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 
 public class AdminScene extends Scene {
     private Button addMovie = new Button("Add movies");
+    private Button notifications = new Button("Notifications");
 
     public AdminScene(Stage stage, VotingRoom votingRoom, Admin admin) {
         super(new VBox(), 500, 500, Color.LIGHTGRAY);
@@ -23,8 +24,12 @@ public class AdminScene extends Scene {
             stage.setScene(addMovieScene);
         });
 
+        notifications.setOnAction(e->{
+            SuggestNotificationScene suggestNotificationScene = new SuggestNotificationScene(votingRoom, stage);
+            stage.setScene(suggestNotificationScene);
+        });
 
 
-        vbox.getChildren().addAll(addMovie);
+        vbox.getChildren().addAll(addMovie, notifications);
     }
 }

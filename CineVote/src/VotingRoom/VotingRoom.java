@@ -38,6 +38,7 @@ public class VotingRoom implements Serializable {
         voters.add(new LowerClass("lower", "lower"));
         voters.add(new MiddleClass("middle", "middle"));
         voters.add(new MovieExpert("movieexpert", "movie"));
+        voters.add(new AnalyzeExpert("analyze", "analyze"));
     }
 
     public List<Movie> getMovies() {
@@ -57,8 +58,15 @@ public class VotingRoom implements Serializable {
         voters.add(voter);
     }
 
-    public void suggestNominaation(Movie movie){
-        nominatedMovies.add(movie);
+    public void suggestNominaation(Movie movie, int priority){
+        if (priority == 1) {
+            nominatedMovies.add(0, movie); // Add movie to the beginning of the list
+        } else {
+            nominatedMovies.add(movie); // Add movie to the end of the list
+        }
+    }
+    public List<Movie> getNominatedMovies(){
+        return nominatedMovies;
     }
 
 
@@ -68,6 +76,7 @@ public class VotingRoom implements Serializable {
 
             out.writeObject(movies);
             out.writeObject(voters);
+            out.writeObject(nominatedMovies);
             System.out.println("VotingRoom object has been serialized and saved.");
 
         } catch (IOException e) {
@@ -79,10 +88,19 @@ public class VotingRoom implements Serializable {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("voting.ser"))) {
             movies = (List<Movie>) in.readObject();
             voters = (List<Voters>) in.readObject();
+            nominatedMovies = (List<Movie>)  in.readObject();
             System.out.println("VotingRoom object has been deserialized and loaded.");
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
+    public void declineSuggestion(Movie movie){
+        nominatedMovies.remove(movie);
+    }
+
+    public void acceptSuggestion(Movie movie){
+        nominatedMovies.remove(movie);
+        movies.add(movie);
+    }
 }
