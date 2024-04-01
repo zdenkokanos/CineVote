@@ -5,29 +5,69 @@ import Voters.Voters;
 import VotingRoom.Movie;
 import VotingRoom.VotingRoom;
 import javafx.geometry.Pos;
+import javafx.scene.text.*;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
-
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-
+import javafx.scene.control.Label;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.scene.shape.Circle;
+import javafx.scene.layout.AnchorPane;
+import javafx.geometry.Insets;
 
 
 public class AdminScene extends Scene {
     private Button addMovie = new Button("Add movies");
-    private Button notifications = new Button("Notifications");
+    private Button notifications = new Button("");
+    private StackPane notificationStackPane = new StackPane();
 
     public AdminScene(Stage stage, VotingRoom votingRoom, Admin admin) {
-        super(new VBox(), 500, 500, Color.LIGHTGRAY);
-        VBox vbox = (VBox) getRoot();
+        super(new AnchorPane(), 500, 500, Color.LIGHTGRAY);
+        AnchorPane root = (AnchorPane) getRoot();
+
+        VBox vbox = new VBox();
         vbox.setAlignment(Pos.CENTER);
+
+        // Load the notification icon
+        Image notificationImage = new Image(getClass().getResourceAsStream("/notificationIcon.png"));
+        if (notificationImage != null) {
+            ImageView notifIcon = new ImageView(notificationImage);
+            notifIcon.setFitWidth(24);
+            notifIcon.setFitHeight(24);
+            notifications.setGraphic(notifIcon);
+
+            Circle counterCircle = new Circle(5, Color.RED);
+            Label counterLabel = new Label();
+            counterLabel.setText(String.valueOf(votingRoom.getNominationCount()));
+            counterLabel.setTextFill(Color.BLACK);
+            counterLabel.setFont(Font.font("Arial", FontWeight.BOLD, 10));
+            StackPane labelPane = new StackPane(counterLabel); // Wrap label in StackPane to apply padding
+            labelPane.setPadding(new Insets(-1, 2, 0, 0));
+
+            notificationStackPane.getChildren().addAll(counterCircle, labelPane);
+            StackPane.setAlignment(counterLabel, Pos.CENTER);
+            StackPane.setAlignment(counterCircle, Pos.TOP_RIGHT);
+            StackPane.setAlignment(counterLabel, Pos.TOP_RIGHT);
+
+            // Position the notificationStackPane
+            AnchorPane.setTopAnchor(notifications, 10.0);
+            AnchorPane.setRightAnchor(notifications, 10.0);
+            AnchorPane.setTopAnchor(notificationStackPane, 15.0);
+            AnchorPane.setRightAnchor(notificationStackPane, 15.0);
+
+        } else {
+            System.err.println("Failed to load notification icon.");
+        }
 
         addMovie.setOnAction(e -> {
             AddMovieScene addMovieScene = new AddMovieScene(stage, votingRoom, (Voters) admin, "Nominate movies");
@@ -39,20 +79,20 @@ public class AdminScene extends Scene {
             stage.setScene(suggestNotificationScene);
         });
 
-        // Creating a simple bar chart
-        List<Movie> movies = new ArrayList<>();
-        movies = votingRoom.getMovies();
+        // Bar Chart
+        List<Movie> movies = votingRoom.getMovies();
         CategoryAxis xAxis = new CategoryAxis();
         NumberAxis yAxis = new NumberAxis();
+        yAxis.setTickUnit(1);
         BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
         barChart.setTitle("Voting is still running...");
         XYChart.Series<String, Number> series = new XYChart.Series<>();
-        for (Movie movie : movies)
-        {
+        for (Movie movie : movies) {
             series.getData().add(new XYChart.Data<>(movie.getTitle(), movie.getVotes()));
         }
         barChart.getData().add(series);
 
-        vbox.getChildren().addAll(addMovie, notifications, barChart);
+        vbox.getChildren().addAll(barChart, addMovie);
+        root.getChildren().addAll(vbox, notifications, notificationStackPane);
     }
 }

@@ -103,4 +103,12 @@ public class VotingRoom implements Serializable {
         nominatedMovies.remove(movie);
         movies.add(movie);
     }
+
+    public int getNominationCount(){
+        int count =0;
+        for(Movie movie: nominatedMovies){
+            count++;
+        }
+        return count;
+    }
 }
