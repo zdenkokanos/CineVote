@@ -2,6 +2,7 @@ package GUI;
 
 import VotingRoom.Movie;
 import VotingRoom.VotingRoom;
+import Voters.Admin;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -11,7 +12,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class SuggestNotificationScene extends Scene {
-    public SuggestNotificationScene(VotingRoom votingRoom, Stage stage) {
+    private Button exit = new Button("Exit");
+    public SuggestNotificationScene(VotingRoom votingRoom, Stage stage, Admin admin) {
         super(new VBox(), 500, 600);
 
         // Create VBox to hold multiple boxes with text
@@ -29,33 +31,39 @@ public class SuggestNotificationScene extends Scene {
         {
             e.printStackTrace();
         }
+
+        exit.setOnAction(e->{
+            AdminScene adminScene = new AdminScene(stage, votingRoom, admin);
+            stage.setScene(adminScene);
+        });
+        container.getChildren().add(exit);
     }
 
-    // Method to create a VBox containing movie title and buttons
-    private VBox createMovieBox(Movie movie, VotingRoom votingRoom, Stage stage, VBox parentContainer) {
-        Label label = new Label(movie.getTitle()); // Create a label with the movie title
-        Button button1 = new Button("Accept"); // Create button 1
-        Button button2 = new Button("Decline"); // Create button 2
-        VBox box = new VBox(label, new HBox(button1, button2)); // Container for buttons and label
 
-        // Button actions
+    private VBox createMovieBox(Movie movie, VotingRoom votingRoom, Stage stage, VBox parentContainer) {
+        Label label = new Label(movie.getTitle());
+        Button button1 = new Button("Accept");
+        Button button2 = new Button("Decline");
+        VBox box = new VBox(label, new HBox(button1, button2));
+
+
         button1.setOnAction(e -> {
             votingRoom.acceptSuggestion(movie);
             votingRoom.saveVotingRoom();
-            parentContainer.getChildren().remove(box); // Remove the container from the parent VBox
-            // You may need to update the scene here if necessary
+            parentContainer.getChildren().remove(box);
+
         });
 
         button2.setOnAction(e -> {
             votingRoom.declineSuggestion(movie);
             votingRoom.saveVotingRoom();
-            parentContainer.getChildren().remove(box); // Remove the container from the parent VBox
-            // You may need to update the scene here if necessary
+            parentContainer.getChildren().remove(box);
+
         });
 
-        box.setStyle("-fx-border-color: black; -fx-border-width: 1px;"); // Add border to the box
-        box.setSpacing(5); // Set spacing between label and buttons
-        box.setPadding(new Insets(5)); // Add padding to the box
-        return box; // Return the created VBox
+        box.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
+        box.setSpacing(5);
+        box.setPadding(new Insets(5));
+        return box;
     }
 }

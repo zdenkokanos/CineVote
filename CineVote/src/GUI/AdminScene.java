@@ -33,6 +33,7 @@ public class AdminScene extends Scene {
     private Button startNew = new Button("Start new voting");
     private Button notifications = new Button("");
     private StackPane notificationStackPane = new StackPane();
+    private Button exit = new Button("Exit");
 
     public AdminScene(Stage stage, VotingRoom votingRoom, Admin admin) {
         super(new AnchorPane(), 500, 600, Color.LIGHTGRAY);
@@ -80,9 +81,11 @@ public class AdminScene extends Scene {
         });
 
         notifications.setOnAction(e -> {
-            SuggestNotificationScene suggestNotificationScene = new SuggestNotificationScene(votingRoom, stage);
+            SuggestNotificationScene suggestNotificationScene = new SuggestNotificationScene(votingRoom, stage,(Admin)admin);
             stage.setScene(suggestNotificationScene);
         });
+
+        exit.setOnAction(e->stage.close());
 
         startNew.setOnAction(e -> {
             File fileToDelete = new File("voting.ser");
@@ -128,7 +131,7 @@ public class AdminScene extends Scene {
 
         vbox.getChildren().
 
-    addAll(barChart, addMovie, startNew);
+    addAll(barChart, addMovie, startNew, exit);
         root.getChildren().
 
     addAll(vbox, notifications, notificationStackPane);

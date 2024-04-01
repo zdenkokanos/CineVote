@@ -37,9 +37,8 @@ public class AddMovieScene extends Scene {
         gridPane.setVgap(10); // Vertical gap between elements
         gridPane.setHgap(10); // Horizontal gap between elements
         gridPane.setPadding(new Insets(80, 0, 0, 0));
-        vBox.setPadding(new Insets(30,0,0,0));
+        vBox.setPadding(new Insets(30, 0, 0, 0));
         getStylesheets().add(css);
-
 
 
         // Add labels and text fields to the grid pane
@@ -57,23 +56,42 @@ public class AddMovieScene extends Scene {
         gridPane.add(makeYear, 1, 5);
         gridPane.add(submit, 1, 6);
 
+        Label errorMessageLabel = new Label("");
+        errorMessageLabel.setTextFill(Color.RED);
+        errorMessageLabel.setPadding(new Insets(10, 0, 0, 0));
+        vBox.getChildren().add(errorMessageLabel);
+
         submit.setOnAction(e -> {
             String movieNameText = movieName.getText();
             String directorNameText = directorName.getText();
-            int directorAgeText = Integer.parseInt(directorAge.getText());
+            String directorAgeTextStr = directorAge.getText();
             String actorNameText = actorName.getText();
-            int actorAgeText = Integer.parseInt(actorAge.getText());
-            int makeYearText = Integer.parseInt(makeYear.getText());
-            if (voter instanceof Admin)
+            String actorAgeTextStr = actorAge.getText();
+            String makeYearTextStr = makeYear.getText();
+
+            if (movieNameText.isEmpty() || directorNameText.isEmpty() || directorAgeTextStr.isEmpty() ||
+                    actorNameText.isEmpty() || actorAgeTextStr.isEmpty() || makeYearTextStr.isEmpty())
             {
-                ((Admin) voter).nominate(movieNameText, directorNameText, directorAgeText, actorNameText, actorAgeText, makeYearText, votingRoom);
+                errorMessageLabel.setText("Please fill in all fields.");
+                return;
             }
-            else if(voter instanceof MiddleClass){
-                ((MiddleClass)voter).suggest_nomination(movieNameText, directorNameText, directorAgeText, actorNameText, actorAgeText, makeYearText, votingRoom);
+            try {
+                int directorAgeText = Integer.parseInt(directorAgeTextStr);
+                int actorAgeText = Integer.parseInt(actorAgeTextStr);
+                int makeYearText = Integer.parseInt(makeYearTextStr);
+
+                if (voter instanceof Admin) {
+                    ((Admin) voter).nominate(movieNameText, directorNameText, directorAgeText, actorNameText, actorAgeText, makeYearText, votingRoom);
+                } else if (voter instanceof MiddleClass) {
+                    ((MiddleClass) voter).suggest_nomination(movieNameText, directorNameText, directorAgeText, actorNameText, actorAgeText, makeYearText, votingRoom);
+                }
+                votingRoom.saveVotingRoom();
+                ExitScene exitScene = new ExitScene(votingRoom, stage, voter);
+                stage.setScene(exitScene);
+            } catch (NumberFormatException ex) {
+                errorMessageLabel.setText("Please enter valid integer values for age and year.");
             }
-            votingRoom.saveVotingRoom();
-            ExitScene exitScene = new ExitScene(votingRoom, stage, voter);
-            stage.setScene(exitScene);
+
         });
     }
 }
