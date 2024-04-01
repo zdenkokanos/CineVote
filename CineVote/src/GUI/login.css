@@ -5,7 +5,12 @@
 
 #pleaseLogLabel{
     -fx-margin-bottom: 20px;
+    -fx-font-family: Arial;
     -fx-font-size: 20px;
-    -fx-text-fill: white;
+    -fx-text-fill: black;
     -fx-font-weight: bold;
+}
+
+.button{
+    -fx-cursor: hand;
 }

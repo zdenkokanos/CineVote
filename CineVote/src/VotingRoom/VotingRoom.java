@@ -49,64 +49,79 @@ public class VotingRoom implements Serializable {
         return voters;
     }
 
-    public void addMovie(Movie movie){
+    public void addMovie(Movie movie) {
         movies.add(movie);
     }
 
 
-    public void addVoter(LowerClass voter){
+    public void addVoter(LowerClass voter) {
         voters.add(voter);
     }
 
-    public void suggestNominaation(Movie movie, int priority){
-        if (priority == 1) {
+    public void suggestNominaation(Movie movie, int priority) {
+        if (priority == 1)
+        {
             nominatedMovies.add(0, movie); // Add movie to the beginning of the list
-        } else {
+        } else
+        {
             nominatedMovies.add(movie); // Add movie to the end of the list
         }
     }
-    public List<Movie> getNominatedMovies(){
+
+    public List<Movie> getNominatedMovies() {
         return nominatedMovies;
     }
 
 
     public void saveVotingRoom() {
         try (FileOutputStream fileOut = new FileOutputStream("voting.ser");
-             ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
+             ObjectOutputStream out = new ObjectOutputStream(fileOut))
+        {
 
             out.writeObject(movies);
             out.writeObject(voters);
             out.writeObject(nominatedMovies);
             System.out.println("VotingRoom object has been serialized and saved.");
 
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             e.printStackTrace();
         }
     }
 
     public void loadVotingRoom() {
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("voting.ser"))) {
+        File file = new File("voting.ser");
+        if (!file.exists())
+        {
+            System.out.println("No file found. Skipping loading.");
+            return;
+        }
+
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file)))
+        {
             movies = (List<Movie>) in.readObject();
             voters = (List<Voters>) in.readObject();
-            nominatedMovies = (List<Movie>)  in.readObject();
+            nominatedMovies = (List<Movie>) in.readObject();
             System.out.println("VotingRoom object has been deserialized and loaded.");
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e)
+        {
             e.printStackTrace();
         }
     }
 
-    public void declineSuggestion(Movie movie){
+    public void declineSuggestion(Movie movie) {
         nominatedMovies.remove(movie);
     }
 
-    public void acceptSuggestion(Movie movie){
+    public void acceptSuggestion(Movie movie) {
         nominatedMovies.remove(movie);
         movies.add(movie);
     }
 
-    public int getNominationCount(){
-        int count =0;
-        for(Movie movie: nominatedMovies){
+    public int getNominationCount() {
+        int count = 0;
+        for (Movie movie : nominatedMovies)
+        {
             count++;
         }
         return count;

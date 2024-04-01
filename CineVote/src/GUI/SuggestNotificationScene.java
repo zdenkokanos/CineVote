@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 
 public class SuggestNotificationScene extends Scene {
     public SuggestNotificationScene(VotingRoom votingRoom, Stage stage) {
-        super(new VBox(), 500, 500);
+        super(new VBox(), 500, 600);
 
         // Create VBox to hold multiple boxes with text
         VBox container = (VBox) this.getRoot();

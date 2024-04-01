@@ -2,6 +2,7 @@ package GUI;
 
 import Voters.Admin;
 import Voters.Voters;
+import java.io.File;
 import VotingRoom.Movie;
 import VotingRoom.VotingRoom;
 import javafx.geometry.Pos;
@@ -19,8 +20,9 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
-import java.util.ArrayList;
+
 import java.util.List;
+
 import javafx.scene.shape.Circle;
 import javafx.scene.layout.AnchorPane;
 import javafx.geometry.Insets;
@@ -28,11 +30,12 @@ import javafx.geometry.Insets;
 
 public class AdminScene extends Scene {
     private Button addMovie = new Button("Add movies");
+    private Button startNew = new Button("Start new voting");
     private Button notifications = new Button("");
     private StackPane notificationStackPane = new StackPane();
 
     public AdminScene(Stage stage, VotingRoom votingRoom, Admin admin) {
-        super(new AnchorPane(), 500, 500, Color.LIGHTGRAY);
+        super(new AnchorPane(), 500, 600, Color.LIGHTGRAY);
         AnchorPane root = (AnchorPane) getRoot();
 
         VBox vbox = new VBox();
@@ -40,7 +43,8 @@ public class AdminScene extends Scene {
 
         // Load the notification icon
         Image notificationImage = new Image(getClass().getResourceAsStream("/notificationIcon.png"));
-        if (notificationImage != null) {
+        if (notificationImage != null)
+        {
             ImageView notifIcon = new ImageView(notificationImage);
             notifIcon.setFitWidth(24);
             notifIcon.setFitHeight(24);
@@ -65,7 +69,8 @@ public class AdminScene extends Scene {
             AnchorPane.setTopAnchor(notificationStackPane, 15.0);
             AnchorPane.setRightAnchor(notificationStackPane, 15.0);
 
-        } else {
+        } else
+        {
             System.err.println("Failed to load notification icon.");
         }
 
@@ -79,20 +84,53 @@ public class AdminScene extends Scene {
             stage.setScene(suggestNotificationScene);
         });
 
-        // Bar Chart
-        List<Movie> movies = votingRoom.getMovies();
-        CategoryAxis xAxis = new CategoryAxis();
-        NumberAxis yAxis = new NumberAxis();
-        yAxis.setTickUnit(1);
-        BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
-        barChart.setTitle("Voting is still running...");
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        for (Movie movie : movies) {
-            series.getData().add(new XYChart.Data<>(movie.getTitle(), movie.getVotes()));
-        }
-        barChart.getData().add(series);
+        startNew.setOnAction(e -> {
+            File fileToDelete = new File("voting.ser");
 
-        vbox.getChildren().addAll(barChart, addMovie);
-        root.getChildren().addAll(vbox, notifications, notificationStackPane);
+            // Check if the file exists
+            if (fileToDelete.exists())
+            {
+                // Attempt to delete the file
+                boolean isDeleted = fileToDelete.delete();
+
+                // Check if the file was successfully deleted
+                if (isDeleted)
+                {
+                    System.out.println("File deleted successfully.");
+                } else
+                {
+                    System.out.println("Failed to delete the file.");
+                }
+            } else
+            {
+                System.out.println("File does not exist.");
+            }
+            stage.close();
+        });
+
+    // Bar Chart
+    List<Movie> movies = votingRoom.getMovies();
+    CategoryAxis xAxis = new CategoryAxis();
+    NumberAxis yAxis = new NumberAxis();
+        yAxis.setTickUnit(1);
+    BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
+        barChart.setTitle("Voting is still running...");
+    XYChart.Series<String, Number> series = new XYChart.Series<>();
+        for(
+    Movie movie :movies)
+
+    {
+        series.getData().add(new XYChart.Data<>(movie.getTitle(), movie.getVotes()));
     }
+        barChart.getData().
+
+    add(series);
+
+        vbox.getChildren().
+
+    addAll(barChart, addMovie, startNew);
+        root.getChildren().
+
+    addAll(vbox, notifications, notificationStackPane);
+}
 }

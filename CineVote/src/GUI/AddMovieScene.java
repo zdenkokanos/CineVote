@@ -25,7 +25,7 @@ public class AddMovieScene extends Scene {
     private String css = this.getClass().getResource("main.css").toExternalForm();
 
     public AddMovieScene(Stage stage, VotingRoom votingRoom, Voters voter, String message) {
-        super(new VBox(), 500, 500, Color.LIGHTGRAY);
+        super(new VBox(), 500, 600, Color.LIGHTGRAY);
         VBox vBox = (VBox) getRoot();
         GridPane gridPane = new GridPane();
         Label messageLabel = new Label(message);
