@@ -1,0 +1,11 @@
+.background{
+    -fx-background-image: url("//src/loginBg.jpeg");
+    -fx-background-size: cover;
+}
+
+#pleaseLogLabel{
+    -fx-margin-bottom: 20px;
+    -fx-font-size: 20px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}

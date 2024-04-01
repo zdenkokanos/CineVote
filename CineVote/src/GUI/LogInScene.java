@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 
@@ -24,15 +25,22 @@ public class LogInScene extends Scene {
     private PasswordField passwordInput = new PasswordField();
     private Button load = new Button("Load");
     private MessageScene alreadyVotedScene = new MessageScene("You have already voted!");
-    private String css = this.getClass().getResource("main.css").toExternalForm();
+    private String css = this.getClass().getResource("login.css").toExternalForm();
     private GridPane gridPane;
 
     public LogInScene(Stage primaryStage) {
-        super(new GridPane(), 500, 500, Color.BLACK);
-        this.gridPane = (GridPane) this.getRoot();
+        super(new VBox(), 500, 600, Color.BLACK);
+        VBox vBox= (VBox) getRoot();
+        GridPane gridPane = new GridPane();
+        Label pleaseLogLabel = new Label("Please Log In to your account");
+        pleaseLogLabel.setId("pleaseLogLabel");
+        vBox.getChildren().add(pleaseLogLabel);
+        vBox.getChildren().addAll(gridPane);
+        vBox.setAlignment(Pos.CENTER);
+        vBox.getStyleClass().add("background");
+        getStylesheets().add(css);
         logIn.setId("logInButton");
         register.setId("registerButton");
-        getStylesheets().add(css);
         gridPane.setHgap(10);
         gridPane.setVgap(10);
         gridPane.setAlignment(Pos.CENTER); // Center the GridPane
