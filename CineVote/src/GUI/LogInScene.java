@@ -21,6 +21,7 @@ public class LogInScene extends Scene {
     private final Button logIn = new Button("Log In");
     private String username;
     private String password;
+    private boolean exists = false;
     private final Button register = new Button("Register");
     private VotingRoom votingRoom = new VotingRoom();
     private TextField usernameInput = new TextField();
@@ -104,10 +105,23 @@ public class LogInScene extends Scene {
                 errorMessageLabel.setText("You must enter username and password!");
             } else
             {
-                LowerClass voter = new LowerClass(username, password);
-                votingRoom.addVoter(voter);
-                VotingScene votingScene = new VotingScene(votingRoom, voter, primaryStage);
-                primaryStage.setScene(votingScene); // If match found, switch to voting scene
+                for (Voters voter : votingRoom.getVoters())
+                {
+                    if (username.equals(voter.getUsername()))
+                    {
+                        exists = true;
+                    }
+                }
+                if (!exists)
+                {
+                    LowerClass voter = new LowerClass(username, password);
+                    votingRoom.addVoter(voter);
+                    VotingScene votingScene = new VotingScene(votingRoom, voter, primaryStage);
+                    primaryStage.setScene(votingScene); // If match found, switch to voting scene
+                } else
+                {
+                    errorMessageLabel.setText("This user already exists, please log in!");
+                }
             }
         });
 
