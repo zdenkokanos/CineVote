@@ -1,39 +1,39 @@
 package GUI;
 
 import Voters.Admin;
-import Voters.Voters;
-import java.io.File;
-import VotingRoom.Movie;
-import VotingRoom.VotingRoom;
+import VotingRoom.*;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.text.*;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.control.Button;
-import javafx.stage.Stage;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
 
+import java.io.File;
 import java.util.List;
 
-import javafx.scene.shape.Circle;
-import javafx.scene.layout.AnchorPane;
-import javafx.geometry.Insets;
-
-
-public class AdminScene extends Scene {
+public class AdminScene extends Scene implements VotingObserver {
     private Button addMovie = new Button("Add movies");
     private Button startNew = new Button("Start new voting");
     private Button notifications = new Button("");
     private StackPane notificationStackPane = new StackPane();
     private Button exit = new Button("Exit");
+
+    private BarChart<String, Number> barChart;
+
 
     public AdminScene(Stage stage, VotingRoom votingRoom, Admin admin) {
         super(new AnchorPane(), 500, 600, Color.LIGHTGRAY);
@@ -44,8 +44,7 @@ public class AdminScene extends Scene {
 
         // Load the notification icon
         Image notificationImage = new Image(getClass().getResourceAsStream("/notificationIcon.png"));
-        if (notificationImage != null)
-        {
+        if (notificationImage != null) {
             ImageView notifIcon = new ImageView(notificationImage);
             notifIcon.setFitWidth(24);
             notifIcon.setFitHeight(24);
@@ -70,70 +69,66 @@ public class AdminScene extends Scene {
             AnchorPane.setTopAnchor(notificationStackPane, 15.0);
             AnchorPane.setRightAnchor(notificationStackPane, 15.0);
 
-        } else
-        {
+        } else {
             System.err.println("Failed to load notification icon.");
         }
 
         addMovie.setOnAction(e -> {
-            AddMovieScene addMovieScene = new AddMovieScene(stage, votingRoom, (Voters) admin, "Nominate movies");
+            AddMovieScene addMovieScene = new AddMovieScene(stage, votingRoom, admin, "Nominate movies");
             stage.setScene(addMovieScene);
         });
 
         notifications.setOnAction(e -> {
-            SuggestNotificationScene suggestNotificationScene = new SuggestNotificationScene(votingRoom, stage,(Admin)admin);
+            SuggestNotificationScene suggestNotificationScene = new SuggestNotificationScene(votingRoom, stage, admin);
             stage.setScene(suggestNotificationScene);
         });
 
-        exit.setOnAction(e->stage.close());
+        exit.setOnAction(e -> stage.close());
 
         startNew.setOnAction(e -> {
             File fileToDelete = new File("voting.ser");
 
             // Check if the file exists
-            if (fileToDelete.exists())
-            {
+            if (fileToDelete.exists()) {
                 // Attempt to delete the file
                 boolean isDeleted = fileToDelete.delete();
 
                 // Check if the file was successfully deleted
-                if (isDeleted)
-                {
+                if (isDeleted) {
                     System.out.println("File deleted successfully.");
-                } else
-                {
+                } else {
                     System.out.println("Failed to delete the file.");
                 }
-            } else
-            {
+            } else {
                 System.out.println("File does not exist.");
             }
             stage.close();
         });
 
-    // Bar Chart
-    List<Movie> movies = votingRoom.getMovies();
-    CategoryAxis xAxis = new CategoryAxis();
-    NumberAxis yAxis = new NumberAxis();
+        // Bar Chart
+        CategoryAxis xAxis = new CategoryAxis();
+        NumberAxis yAxis = new NumberAxis();
         yAxis.setTickUnit(1);
-    BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
+        barChart = new BarChart<>(xAxis, yAxis);
         barChart.setTitle("Voting is still running...");
-    XYChart.Series<String, Number> series = new XYChart.Series<>();
-        for(
-    Movie movie :movies)
 
-    {
-        series.getData().add(new XYChart.Data<>(movie.getTitle(), movie.getVotes()));
+        vbox.getChildren().addAll(barChart, addMovie, startNew, exit);
+        root.getChildren().addAll(vbox, notifications, notificationStackPane);
+
+        // register as an observer
+        votingRoom.addObserver(this);
+        //update with Observer
+        update(votingRoom.getMovies());
     }
-        barChart.getData().
 
-    add(series);
-
-        vbox.getChildren().
-
-    addAll(barChart, addMovie, startNew, exit);
-        root.getChildren().
-
-    addAll(vbox, notifications, notificationStackPane);
-}
+    @Override
+    public void update(List<Movie> movies) {
+        // update the bar chart with the new voting data
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        for (Movie movie : movies) {
+            series.getData().add(new XYChart.Data<>(movie.getTitle(), movie.getVotes()));
+        }
+        barChart.getData().clear(); // clear existing data
+        barChart.getData().add(series); // add updated data
+    }
 }

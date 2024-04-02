@@ -7,6 +7,7 @@ import java.io.*;
 import java.util.*;
 
 public class VotingRoom implements Serializable {
+    private List<VotingObserver> observers = new ArrayList<>();
     private List<Movie> movies;
     private List<Voters> voters;
 
@@ -125,5 +126,20 @@ public class VotingRoom implements Serializable {
             count++;
         }
         return count;
+    }
+
+    public void addObserver(VotingObserver observer) {
+        observers.add(observer);
+    }
+
+    public void removeObserver(VotingObserver observer) {
+        observers.remove(observer);
+    }
+
+    public void notifyObservers() {
+        for (VotingObserver observer : observers)
+        {
+            observer.update(movies);
+        }
     }
 }
