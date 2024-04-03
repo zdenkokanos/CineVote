@@ -37,6 +37,16 @@ public class Movie implements Serializable
     {
         return votes;
     }
+
+    public String getDirectorName(){
+        return director.getName();
+    }
+    public String getMainActorName(){
+        return mainActor.getName();
+    }
+    public int getReleaseYear(){
+        return year;
+    }
 }
 
 

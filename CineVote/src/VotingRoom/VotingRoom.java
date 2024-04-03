@@ -142,4 +142,23 @@ public class VotingRoom implements Serializable {
             observer.update(movies);
         }
     }
+
+    public void restartVoting(){
+        File fileToDelete = new File("voting.ser");
+
+        // Check if the file exists
+        if (fileToDelete.exists()) {
+            // Attempt to delete the file
+            boolean isDeleted = fileToDelete.delete();
+
+            // Check if the file was successfully deleted
+            if (isDeleted) {
+                System.out.println("File deleted successfully.");
+            } else {
+                System.out.println("Failed to delete the file.");
+            }
+        } else {
+            System.out.println("File does not exist.");
+        }
+    }
 }

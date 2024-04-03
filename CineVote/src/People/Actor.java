@@ -11,4 +11,8 @@ public class Actor implements Serializable {
         this.age = age;
 
     }
+
+    public String getName(){
+        return name;
+    }
 }

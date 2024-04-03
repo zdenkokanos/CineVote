@@ -4,7 +4,6 @@ import Voters.*;
 import VotingRoom.VotingRoom;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -13,6 +12,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.event.EventHandler;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 public class AddMovieScene extends Scene {
     private TextField movieName = new TextField();
@@ -93,6 +95,14 @@ public class AddMovieScene extends Scene {
             }
 
         });
+
+        EventHandler<KeyEvent> enterEventHandler = event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                submit.fire(); // Trigger submit button action
+            }
+        };
+
+        setOnKeyPressed(enterEventHandler);
     }
 }
 
