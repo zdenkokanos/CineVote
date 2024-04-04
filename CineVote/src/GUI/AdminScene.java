@@ -32,6 +32,8 @@ public class AdminScene extends Scene implements VotingObserver {
     private StackPane notificationStackPane = new StackPane();
     private Button exit = new Button("Exit");
 
+    private Button logOut = new Button("Log Out");
+
     private BarChart<String, Number> barChart;
 
 
@@ -44,7 +46,8 @@ public class AdminScene extends Scene implements VotingObserver {
 
         // Load the notification icon
         Image notificationImage = new Image(getClass().getResourceAsStream("/notificationIcon.png"));
-        if (notificationImage != null) {
+        if (notificationImage != null)
+        {
             ImageView notifIcon = new ImageView(notificationImage);
             notifIcon.setFitWidth(24);
             notifIcon.setFitHeight(24);
@@ -69,7 +72,8 @@ public class AdminScene extends Scene implements VotingObserver {
             AnchorPane.setTopAnchor(notificationStackPane, 15.0);
             AnchorPane.setRightAnchor(notificationStackPane, 15.0);
 
-        } else {
+        } else
+        {
             System.err.println("Failed to load notification icon.");
         }
 
@@ -90,14 +94,19 @@ public class AdminScene extends Scene implements VotingObserver {
             stage.close();
         });
 
+        logOut.setOnAction(e -> stage.setScene(new LogInScene(stage)));
+
+
         // Bar Chart
         CategoryAxis xAxis = new CategoryAxis();
-        NumberAxis yAxis = new NumberAxis();
-        yAxis.setTickUnit(1);
+        final double yAxisLowerBound = 0; // Set the lower bound of the Y-axis
+        final double yAxisUpperBound = 20;
+        NumberAxis yAxis = new NumberAxis(yAxisLowerBound, yAxisUpperBound, 2);
         barChart = new BarChart<>(xAxis, yAxis);
+        yAxis.setLabel("Votes");
         barChart.setTitle("Voting is still running...");
 
-        vbox.getChildren().addAll(barChart, addMovie, startNew, exit);
+        vbox.getChildren().addAll(barChart, addMovie, startNew, logOut,exit);
         root.getChildren().addAll(vbox, notifications, notificationStackPane);
 
         // register as an observer
@@ -110,7 +119,8 @@ public class AdminScene extends Scene implements VotingObserver {
     public void update(List<Movie> movies) {
         // update the bar chart with the new voting data
         XYChart.Series<String, Number> series = new XYChart.Series<>();
-        for (Movie movie : movies) {
+        for (Movie movie : movies)
+        {
             series.getData().add(new XYChart.Data<>(movie.getTitle(), movie.getVotes()));
         }
         barChart.getData().clear(); // clear existing data

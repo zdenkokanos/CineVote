@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 public class ExitScene extends Scene {
     private String css = this.getClass().getResource("main.css").toExternalForm();
     private Button continueB = new Button("Continue");
+    private Button logOut = new Button("Log out");
     private Button exitB = new Button("Exit");
 
     public ExitScene(VotingRoom votingRoom, Stage stage, Voters voter) {
@@ -40,6 +41,9 @@ public class ExitScene extends Scene {
                 stage.setScene(addMovieScene);
             }
         });
-        vbox.getChildren().addAll(messageLabel, continueB, exitB);
+        logOut.setOnAction(e -> {
+            stage.setScene(new LogInScene(stage));
+        });
+        vbox.getChildren().addAll(messageLabel, continueB, logOut,exitB);
     }
 }

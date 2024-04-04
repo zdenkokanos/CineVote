@@ -67,7 +67,7 @@ public class VotingScene extends Scene {
 
             // Toggle additional info visibility when button is clicked
             additionalInfoButton.setOnAction(e -> {
-                boolean isVisible = directorLabel.isVisible();
+                boolean isVisible = directorLabel.isVisible(); //if one is not shown, all of them aren't
                 directorLabel.setVisible(!isVisible);
                 actorLabel.setVisible(!isVisible);
                 yearLabel.setVisible(!isVisible);
