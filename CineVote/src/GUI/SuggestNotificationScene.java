@@ -1,6 +1,6 @@
 package GUI;
 
-import VotingRoom.Movie;
+import CanBeVoted.Movie;
 import VotingRoom.VotingRoom;
 import Voters.Admin;
 import javafx.geometry.Insets;

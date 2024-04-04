@@ -1,8 +1,8 @@
-package People;
+package CanBeVoted;
 
 import java.io.Serializable;
 
-public class Actor implements Serializable {
+public class Actor extends CanBeVoted implements Serializable {
     private String name;
     private int age;
 
@@ -14,5 +14,9 @@ public class Actor implements Serializable {
 
     public String getName(){
         return name;
+    }
+
+    public int getAge(){
+        return age;
     }
 }

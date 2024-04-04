@@ -1,5 +1,7 @@
 package VotingRoom;
 
+import CanBeVoted.Movie;
+
 import java.util.List;
 
 public interface VotingObserver {

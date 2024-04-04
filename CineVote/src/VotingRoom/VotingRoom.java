@@ -1,18 +1,21 @@
 package VotingRoom;
 
-import People.*;
+import CanBeVoted.*;
 import Voters.*;
 
 import java.io.*;
 import java.util.*;
 
+//spravit nejaky passport pre film ktory bude drzat typ ako kategoriu a zaroven aj metodu na to aby to vypisalo pri informaciach o filme
+//postacuje agregácia ale treba spraviť vlastnú
+//observera dat do vlastnej classy
+//spravit v nej pole observerov a tam aj tu funkciu update ktoru zavolam v AdminScene
 public class VotingRoom implements Serializable {
     private List<VotingObserver> observers; //návrhový vzor Observer
     private List<Movie> movies; //aggregation
     private List<Voters> voters; //aggregation
     private List<Director> directors;
     private List<Actor> actors;
-
     private List<Movie> nominatedMovies;
 
     public VotingRoom() {
@@ -134,6 +137,8 @@ public class VotingRoom implements Serializable {
             out.writeObject(movies);
             out.writeObject(voters);
             out.writeObject(nominatedMovies);
+            out.writeObject(actors);
+            out.writeObject(directors);
             System.out.println("VotingRoom object has been serialized and saved.");
 
         } catch (IOException e)
@@ -155,6 +160,8 @@ public class VotingRoom implements Serializable {
             movies = (List<Movie>) in.readObject();
             voters = (List<Voters>) in.readObject();
             nominatedMovies = (List<Movie>) in.readObject();
+            actors = (List<Actor>) in.readObject();
+            directors = (List<Director>) in.readObject();
             System.out.println("VotingRoom object has been deserialized and loaded.");
         } catch (IOException | ClassNotFoundException e)
         {
@@ -162,14 +169,21 @@ public class VotingRoom implements Serializable {
         }
     }
 
-    public List<Director> getDirectors(){
+    public List<Director> getDirectors() {
         return directors;
     }
 
-    public List<Actor> getActors(){
+    public List<Actor> getActors() {
         return actors;
     }
 
+    public void addDirector(Director director) {
+        directors.add(director);
+    }
+
+    public void addActor(Actor actor) {
+        actors.add(actor);
+    }
 
 
     public void declineSuggestion(Movie movie) {

@@ -1,5 +1,7 @@
 package VotingRoom;
 
+import CanBeVoted.*;
+
 public interface VotingProcess {
-     void vote(Movie movie);
+     void vote(CanBeVoted canBeVoted);
 }

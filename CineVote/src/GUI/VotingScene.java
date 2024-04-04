@@ -1,9 +1,11 @@
 package GUI;
 
-import People.Director;
+import CanBeVoted.Actor;
+import CanBeVoted.Director;
 import Voters.Voters;
-import VotingRoom.Movie;
+import CanBeVoted.Movie;
 import VotingRoom.VotingRoom;
+import javafx.animation.PauseTransition;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -15,7 +17,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import java.util.List;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.TitledPane;
@@ -23,70 +24,127 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.control.Label;
 
 import javafx.scene.layout.HBox;
+import javafx.util.Duration;
 
 public class VotingScene extends Scene {
     private MessageScene thankYouScene = new MessageScene("Thank you for your time!");
     private Button vote = new Button("Vote");
     private String css = this.getClass().getResource("votingScene.css").toExternalForm();
 
-    public VotingScene(VotingRoom votingRoom, Voters voter, Stage stage){
+    public VotingScene(VotingRoom votingRoom, Voters voter, Stage stage) {
         super(new ScrollPane(), 500, 600, Color.LIGHTGRAY);
         ScrollPane scrollPane = (ScrollPane) this.getRoot();
         scrollPane.setVvalue(0.0);
         VBox pane = new VBox(); //the main pane
         scrollPane.setContent(pane);
-        ToggleGroup toggleGroup = new ToggleGroup(); //all movies are under this toggle group
+
         getStylesheets().add(css); //adds css to voting scene
         // Display movies from VotingRoom
-        List<Movie> movies = votingRoom.getMovies();
-
         TitledPane allMoviesPane = new TitledPane(); //this makes sections for movies directors and actors
         allMoviesPane.setText("Vote for Movies");
+        allMoviesPane.setExpanded(false);
         VBox allMoviesContent = new VBox();
+        //director TitledPane
+        TitledPane directorSectionPane = new TitledPane();
+        directorSectionPane.setText("Vote for Directors");
+        directorSectionPane.setExpanded(false);
+        VBox allDirectorContent = new VBox();
+        //actor TitledPane
+        TitledPane actorSectionPane = new TitledPane();
+        actorSectionPane.setText("Vote for Actors");
+        actorSectionPane.setExpanded(false);
+        VBox allActorContent = new VBox();
+        //toggle groups
+        ToggleGroup movies = new ToggleGroup(); //all movies are under this toggle group
+        ToggleGroup directors = new ToggleGroup(); //toggle group for directors
+        ToggleGroup actors = new ToggleGroup(); //toggle group for actors
 
-        //displays all movies in votingScene
-        for (Movie movie : movies) {
-            VBox movieSection = createMovieSection(movie, toggleGroup);
+        //displays all movies in VotingScene
+        for (Movie movie : votingRoom.getMovies())
+        {
+            VBox movieSection = createMovieSection(movie, movies, allMoviesPane, directorSectionPane, directors);
             allMoviesContent.getChildren().add(movieSection);
         }
 
         allMoviesPane.setContent(allMoviesContent);
         pane.getChildren().add(allMoviesPane);
 
-        TitledPane anotherSectionPane = new TitledPane();
-        anotherSectionPane.setText("Vote for Directors");
-        anotherSectionPane.setExpanded(false);
-        VBox directorSectionContent = new VBox();
-
         //displays all directors in VotingScene
-        ToggleGroup directors = new ToggleGroup(); //toggle group for directors
-        for(Director director: votingRoom.getDirectors()){
-            VBox directorContent = createDirectorSection(director, toggleGroup);
-            directorSectionContent.getChildren().add(directorContent);
+
+        for (Director director : votingRoom.getDirectors())
+        {
+            VBox directorContent = createDirectorSection(director, directors, directorSectionPane, actorSectionPane, actors);
+            allDirectorContent.getChildren().add(directorContent);
         }
 
-        anotherSectionPane.setContent(directorSectionContent);
-        pane.getChildren().add(anotherSectionPane);
+        directorSectionPane.setContent(allDirectorContent);
+        pane.getChildren().add(directorSectionPane);
 
+
+        //displays all actors in VotingScene
+
+        for (Actor actor : votingRoom.getActors())
+        {
+            VBox actorContent = createActorSection(actor, actors, actorSectionPane);
+            allActorContent.getChildren().add(actorContent);
+        }
+
+        actorSectionPane.setContent(allActorContent);
+        pane.getChildren().add(actorSectionPane);
+
+        Label errorMessageLabel = new Label("");
+        errorMessageLabel.setTextFill(Color.RED);
+        errorMessageLabel.setPadding(new Insets(5, 0, 0, 5));
+        pane.getChildren().add(errorMessageLabel);
+
+        //vote button
         VBox votebutton = new VBox(vote);
         votebutton.setPadding(new Insets(10, 10, 10, 10));
         pane.getChildren().add(votebutton);
 
+
         vote.setOnAction(e -> {
-            RadioButton selectedRadioButton = (RadioButton) toggleGroup.getSelectedToggle();
-            if (selectedRadioButton != null) {
-                Movie selectedMovie = (Movie) selectedRadioButton.getUserData();
+            RadioButton selectedRadioButtonMovie = (RadioButton) movies.getSelectedToggle();
+            RadioButton selectedRadioButtonDirector = (RadioButton) directors.getSelectedToggle();
+            RadioButton selectedRadioButtonActor = (RadioButton) actors.getSelectedToggle();
+
+            if (selectedRadioButtonMovie != null && selectedRadioButtonDirector != null && selectedRadioButtonActor != null)
+            {
+                Movie selectedMovie = (Movie) selectedRadioButtonMovie.getUserData();
+                Director selectedDirector = (Director) selectedRadioButtonDirector.getUserData();
+                Actor selectedActor = (Actor) selectedRadioButtonActor.getUserData();
                 voter.vote(selectedMovie);
-                System.out.println("Selected movie: " + selectedMovie.getTitle()+"\n***********************");
+                voter.vote(selectedDirector);
+                voter.vote(selectedActor);
+                System.out.println("Selected movie: " + selectedMovie.getTitle() + "\n***********************");
+                System.out.println("Selected director: " + selectedDirector.getName() + "\n***********************");
+                System.out.println("Selected actor: " + selectedActor.getName() + "\n***********************");
+                //printMovies(votingRoom); //if you want to print vote count after each voting session
                 stage.setScene(thankYouScene);
                 votingRoom.saveVotingRoom();
-            } else {
-                System.out.println("No movie selected.");
+            } else
+            {
+                errorMessageLabel.setText("You have to choose from each category!");
+                PauseTransition pause = new PauseTransition(Duration.seconds(0.4)); //makes smoother transition showing the error message
+                pause.setOnFinished(event -> {
+                    if (selectedRadioButtonMovie == null)
+                    {
+                        allMoviesPane.setExpanded(true);
+                    } else if (selectedRadioButtonActor == null)
+                    {
+                        actorSectionPane.setExpanded(true);
+                    } else if (selectedRadioButtonDirector == null)
+                    {
+                        directorSectionPane.setExpanded(true);
+                    }
+                });
+                pause.play(); // Start the pause transition
             }
         });
 
         EventHandler<KeyEvent> enterEventHandler = event -> {
-            if (event.getCode() == KeyCode.ENTER) {
+            if (event.getCode() == KeyCode.ENTER)
+            {
                 vote.fire(); // Trigger voting button action
             }
         };
@@ -94,7 +152,7 @@ public class VotingScene extends Scene {
         setOnKeyPressed(enterEventHandler);
     }
 
-    private VBox createMovieSection(Movie movie, ToggleGroup toggleGroup) {
+    private VBox createMovieSection(Movie movie, ToggleGroup movies, TitledPane moviePane, TitledPane directorPane, ToggleGroup directors) {
         ToggleButton additionalInfoButton = new ToggleButton("►");
         Label directorLabel = new Label("Director: " + movie.getDirectorName());
         Label actorLabel = new Label("Main Actor/Actress: " + movie.getMainActorName());
@@ -106,7 +164,7 @@ public class VotingScene extends Scene {
         actorLabel.setPadding(new Insets(0, 0, 0, 50));
         yearLabel.setPadding(new Insets(0, 0, 0, 50));
         RadioButton radioButton = new RadioButton(movie.getTitle());
-        radioButton.setToggleGroup(toggleGroup);
+        radioButton.setToggleGroup(movies);
 
         // Use HBox to arrange radioButton and additionalInfoButton horizontally
         HBox buttonBox = new HBox(radioButton, additionalInfoButton);
@@ -126,12 +184,14 @@ public class VotingScene extends Scene {
             actorLabel.setVisible(!isVisible);
             yearLabel.setVisible(!isVisible);
             // Adjust layout accordingly
-            if (isVisible) {
+            if (isVisible)
+            {
                 additionalInfoButton.setText("►");
                 movieBox.getChildren().remove(directorLabel);
                 movieBox.getChildren().remove(actorLabel);
                 movieBox.getChildren().remove(yearLabel);
-            } else {
+            } else
+            {
                 additionalInfoButton.setText("▼");
                 movieBox.getChildren().add(directorLabel);
                 movieBox.getChildren().add(actorLabel);
@@ -139,16 +199,60 @@ public class VotingScene extends Scene {
             }
         });
 
+        radioButton.setOnAction(e -> {
+            moviePane.setExpanded(false);
+            if (directors.getSelectedToggle() == null)
+            {
+                directorPane.setExpanded(true);
+            }
+        });
+
         return movieBox;
     }
 
-    private VBox createDirectorSection(Director director, ToggleGroup toggleGroup){
+    private VBox createDirectorSection(Director director, ToggleGroup toggleGroup, TitledPane directorPane, TitledPane actorPane, ToggleGroup actors) {
         VBox directorBox = new VBox();
         RadioButton radioButton = new RadioButton(director.getName());
         radioButton.setToggleGroup(toggleGroup);
         radioButton.setUserData(director); // Set director as user data
         directorBox.getChildren().add(radioButton);
+        radioButton.setOnAction(e -> {
+            directorPane.setExpanded(false);
+            if (actors.getSelectedToggle() == null)
+            {
+                actorPane.setExpanded(true);
+            }
+        });
         return directorBox;
+    }
+
+    private VBox createActorSection(Actor actor, ToggleGroup toggleGroup, TitledPane actorPane) {
+        VBox actorBox = new VBox();
+        RadioButton radioButton = new RadioButton(actor.getName());
+        radioButton.setToggleGroup(toggleGroup);
+        radioButton.setUserData(actor); // Set director as user data
+        actorBox.getChildren().add(radioButton);
+        radioButton.setOnAction(e -> {
+            actorPane.setExpanded(false);
+        });
+        return actorBox;
+    }
+
+    private void printMovies(VotingRoom votingRoom) {
+        for (Movie movie : votingRoom.getMovies())
+        {
+            System.out.println("Movie: " + movie.getTitle() + ": " + movie.getVotes());
+        }
+        System.out.println("*************************");
+        for (Director director : votingRoom.getDirectors())
+        {
+            System.out.println("Director: " + director.getName() + ": " + director.getVotes());
+        }
+        System.out.println("*************************");
+        for (Actor actor : votingRoom.getActors())
+        {
+            System.out.println("Actor: " + actor.getName() + ": " + actor.getVotes());
+        }
     }
 }
 

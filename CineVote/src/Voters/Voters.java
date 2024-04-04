@@ -1,4 +1,5 @@
 package Voters;
+import CanBeVoted.*;
 import VotingRoom.*;
 
 import java.io.*;
@@ -12,8 +13,8 @@ public abstract class Voters implements VotingProcess, Serializable{
         this.username = username;
         this.password = password;
     }
-    public void vote(Movie movie){
-        movie.addvote(1);
+    public void vote(CanBeVoted canBeVoted){
+        canBeVoted.addVote(1);
         voted();
     }
 

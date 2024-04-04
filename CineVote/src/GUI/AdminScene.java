@@ -1,5 +1,6 @@
 package GUI;
 
+import CanBeVoted.Movie;
 import Voters.Admin;
 import VotingRoom.*;
 import javafx.geometry.Insets;
@@ -100,7 +101,7 @@ public class AdminScene extends Scene implements VotingObserver {
         NumberAxis yAxis = new NumberAxis();
         yAxis.setTickUnit(2);
         barChart = new BarChart<>(xAxis, yAxis);
-        yAxis.setLabel("Votes");
+        yAxis.setLabel("Movies");
         barChart.setTitle("Voting is still running...");
 
         vbox.getChildren().addAll(barChart, addMovie, startNew, logOut,exit);
@@ -118,6 +119,7 @@ public class AdminScene extends Scene implements VotingObserver {
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         for (Movie movie : movies)
         {
+            System.out.println("Movie: "+movie.getTitle()+ ": "+ movie.getVotes());
             series.getData().add(new XYChart.Data<>(movie.getTitle(), movie.getVotes()));
         }
         barChart.getData().clear(); // clear existing data
