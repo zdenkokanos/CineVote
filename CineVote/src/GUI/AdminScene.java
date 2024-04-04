@@ -21,8 +21,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-
-import java.io.File;
 import java.util.List;
 
 public class AdminScene extends Scene implements VotingObserver {
@@ -99,9 +97,8 @@ public class AdminScene extends Scene implements VotingObserver {
 
         // Bar Chart
         CategoryAxis xAxis = new CategoryAxis();
-        final double yAxisLowerBound = 0; // Set the lower bound of the Y-axis
-        final double yAxisUpperBound = 20;
-        NumberAxis yAxis = new NumberAxis(yAxisLowerBound, yAxisUpperBound, 2);
+        NumberAxis yAxis = new NumberAxis();
+        yAxis.setTickUnit(2);
         barChart = new BarChart<>(xAxis, yAxis);
         yAxis.setLabel("Votes");
         barChart.setTitle("Voting is still running...");
