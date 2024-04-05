@@ -3,14 +3,16 @@ package GUI;
 import CanBeVoted.Movie;
 import Voters.Admin;
 import VotingRoom.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -22,19 +24,21 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import java.util.List;
 
-public class AdminScene extends Scene implements VotingObserver {
+public class AdminScene extends Scene {
     private Button addMovie = new Button("Add movies");
     private Button startNew = new Button("Start new voting");
     private Button notifications = new Button("");
     private StackPane notificationStackPane = new StackPane();
     private Button exit = new Button("Exit");
-
     private Button logOut = new Button("Log Out");
+    private Observer votingRoomObserver;
 
-    private BarChart<String, Number> barChart;
+    private BarChart<String, Number> barChartMovies;
+    private BarChart<String, Number> barChartActors;
+    private BarChart<String, Number> barChartDirectors;
 
+    private ComboBox<String> graphSelector;
 
     public AdminScene(Stage stage, VotingRoom votingRoom, Admin admin) {
         super(new AnchorPane(), 500, 600, Color.LIGHTGRAY);
@@ -70,7 +74,6 @@ public class AdminScene extends Scene implements VotingObserver {
             AnchorPane.setRightAnchor(notifications, 10.0);
             AnchorPane.setTopAnchor(notificationStackPane, 15.0);
             AnchorPane.setRightAnchor(notificationStackPane, 15.0);
-
         } else
         {
             System.err.println("Failed to load notification icon.");
@@ -94,35 +97,74 @@ public class AdminScene extends Scene implements VotingObserver {
         });
 
         logOut.setOnAction(e -> stage.setScene(new LogInScene(stage)));
+        //Observer
+        votingRoomObserver = new Observer(votingRoom);
+        votingRoom.addObserver(votingRoomObserver);
 
-
-        // Bar Chart
+        // Bar Chart Movies
         CategoryAxis xAxis = new CategoryAxis();
         NumberAxis yAxis = new NumberAxis();
         yAxis.setTickUnit(2);
-        barChart = new BarChart<>(xAxis, yAxis);
+        barChartMovies = new BarChart<>(xAxis, yAxis);
         yAxis.setLabel("Movies");
-        barChart.setTitle("Voting is still running...");
+        barChartMovies.setTitle("Voting is still running...");
+        barChartMovies.getData().clear();
+        barChartMovies.getData().add(votingRoomObserver.update(votingRoom.getMovies(), barChartMovies));
+        VBox vBoxBarCharts = new VBox(barChartMovies);
+        //Bar Chart Actors
+        CategoryAxis xAxis2 = new CategoryAxis();
+        NumberAxis yAxis2 = new NumberAxis();
+        yAxis2.setTickUnit(2);
+        barChartActors = new BarChart<>(xAxis2, yAxis2);
+        yAxis2.setLabel("Actors");
+        barChartActors.setTitle("Voting is still running...");
+        //Bar Chart Directors
+        CategoryAxis xAxis3 = new CategoryAxis();
+        NumberAxis yAxis3 = new NumberAxis();
+        yAxis3.setTickUnit(2);
+        barChartDirectors = new BarChart<>(xAxis3, yAxis3);
+        yAxis3.setLabel("Directors");
+        barChartDirectors.setTitle("Voting is still running...");
 
-        vbox.getChildren().addAll(barChart, addMovie, startNew, logOut,exit);
-        root.getChildren().addAll(vbox, notifications, notificationStackPane);
 
-        // register as an observer
-        votingRoom.addObserver(this);
-        //update with Observer
-        update(votingRoom.getMovies());
+        // Initialize the graph selector ComboBox
+        graphSelector = new ComboBox<>();
+        graphSelector.setPromptText("Movies");
+        ObservableList<String> graphOptions = FXCollections.observableArrayList(
+                "Movies", "Actors", "Directors" // graph options
+        );
+        graphSelector.setItems(graphOptions);
+        graphSelector.setOnAction(e -> {
+            String selectedGraph = graphSelector.getValue();
+            if (selectedGraph != null)
+            {
+                switch (selectedGraph)
+                {
+                    case "Movies":
+                        barChartMovies.getData().clear();
+                        barChartMovies.getData().add(votingRoomObserver.update(votingRoom.getMovies(), barChartMovies));
+                        vBoxBarCharts.getChildren().clear();
+                        vBoxBarCharts.getChildren().add(barChartMovies);
+                        break;
+                    case "Actors":
+                        barChartActors.getData().clear();
+                        barChartActors.getData().add(votingRoomObserver.update(votingRoom.getActors(),barChartActors));
+                        vBoxBarCharts.getChildren().clear();
+                        vBoxBarCharts.getChildren().add(barChartActors);
+                        break;
+                    case "Directors":
+                        barChartDirectors.getData().clear();
+                        barChartDirectors.getData().add(votingRoomObserver.update(votingRoom.getDirectors(),barChartDirectors));
+                        vBoxBarCharts.getChildren().clear();
+                        vBoxBarCharts.getChildren().add(barChartDirectors);
+                        break;
+                }
+            }
+        });
+
+        vbox.getChildren().addAll(vBoxBarCharts, addMovie, startNew, logOut, exit);
+        root.getChildren().addAll(vbox, notifications, notificationStackPane, graphSelector);
+
     }
 
-    @Override
-    public void update(List<Movie> movies) {
-        // update the bar chart with the new voting data
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        for (Movie movie : movies)
-        {
-            System.out.println("Movie: "+movie.getTitle()+ ": "+ movie.getVotes());
-            series.getData().add(new XYChart.Data<>(movie.getTitle(), movie.getVotes()));
-        }
-        barChart.getData().clear(); // clear existing data
-        barChart.getData().add(series); // add updated data
-    }
 }
