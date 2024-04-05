@@ -27,6 +27,7 @@ public class AddMovieScene extends Scene {
     private String css = this.getClass().getResource("main.css").toExternalForm();
 
     public AddMovieScene(Stage stage, VotingRoom votingRoom, Voters voter, String message) {
+        //sets the pane and the main elements
         super(new VBox(), 500, 600, Color.LIGHTGRAY);
         VBox vBox = (VBox) getRoot();
         GridPane gridPane = new GridPane();
@@ -63,6 +64,8 @@ public class AddMovieScene extends Scene {
         errorMessageLabel.setPadding(new Insets(10, 0, 0, 0));
         vBox.getChildren().add(errorMessageLabel);
 
+
+        //sets buttons on action
         submit.setOnAction(e -> {
             String movieNameText = movieName.getText();
             String directorNameText = directorName.getText();
@@ -96,6 +99,7 @@ public class AddMovieScene extends Scene {
 
         });
 
+        //lets you submit with hitting Enter Key
         EventHandler<KeyEvent> enterEventHandler = event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 submit.fire(); // Trigger submit button action

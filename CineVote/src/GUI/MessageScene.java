@@ -17,6 +17,7 @@ public class MessageScene extends Scene {
     private Button backToLogin = new Button("Back to login?");
 
     public MessageScene(String message) {
+        //sets the pane and the main elements
         super(new VBox(), 500, 600, Color.LIGHTGRAY);
         VBox vbox = (VBox) getRoot();
         vbox.setAlignment(Pos.CENTER);
@@ -25,13 +26,17 @@ public class MessageScene extends Scene {
         Label thankYouLabel = new Label(message);
         thankYouLabel.setId("message");
 
+        //sets buttons on action
         backToLogin.setOnAction(e -> {
             Stage primaryStage = (Stage) ((Button) e.getSource()).getScene().getWindow();
             primaryStage.setScene(new LogInScene(primaryStage));
         });
 
+        //ads elements to the pane
         vbox.getChildren().add(backToLogin);
         vbox.getChildren().add(thankYouLabel);
+
+        //lets you move back to log in just by hitting enter button
         EventHandler<KeyEvent> enterEventHandler = event -> {
             if (event.getCode() == KeyCode.ENTER)
             {

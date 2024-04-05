@@ -33,6 +33,7 @@ public class LogInScene extends Scene {
     private String css = this.getClass().getResource("login.css").toExternalForm();
 
     public LogInScene(Stage primaryStage) {
+        //sets the pane and the main elements
         super(new VBox(), 500, 600, Color.BLACK);
         VBox vBox = (VBox) getRoot();
         GridPane gridPane = new GridPane();
@@ -50,6 +51,7 @@ public class LogInScene extends Scene {
         gridPane.setVgap(10);
         gridPane.setAlignment(Pos.CENTER); // Center the GridPane
 
+        //login input layout
         gridPane.add(new Label("Username:"), 0, 0);
         gridPane.add(usernameInput, 1, 0);
         gridPane.add(new Label("Password:"), 0, 1);
@@ -58,11 +60,14 @@ public class LogInScene extends Scene {
         buttonBox.setAlignment(Pos.CENTER_RIGHT);
         buttonBox.getChildren().addAll(logIn, register);
 
+        //button layout with error message
         gridPane.add(buttonBox, 1, 2);
         Label errorMessageLabel = new Label("");
         errorMessageLabel.setTextFill(Color.RED); // Set text color to red
         gridPane.add(errorMessageLabel, 0, 3, 2, 1); // Add error message label to the grid
-        votingRoom.loadVotingRoom();
+        votingRoom.loadVotingRoom(); //this deserializates the object to continue in the ongoing voting
+
+        //set buttons on action
         logIn.setOnAction(e -> {
             for (Voters voter : votingRoom.getVoters())
             {
@@ -127,6 +132,8 @@ public class LogInScene extends Scene {
                 }
             }
         });
+
+        //hitting enter lets you log in, if you want to register you have to hit the button manually
         EventHandler<KeyEvent> enterEventHandler = event -> {
             if (event.getCode() == KeyCode.ENTER)
             {

@@ -32,6 +32,7 @@ public class VotingScene extends Scene {
     private String css = this.getClass().getResource("votingScene.css").toExternalForm();
 
     public VotingScene(VotingRoom votingRoom, Voters voter, Stage stage) {
+        //sets the pane and the main elements
         super(new ScrollPane(), 500, 600, Color.LIGHTGRAY);
         ScrollPane scrollPane = (ScrollPane) this.getRoot();
         scrollPane.setVvalue(0.0);
@@ -39,21 +40,25 @@ public class VotingScene extends Scene {
         scrollPane.setContent(pane);
 
         getStylesheets().add(css); //adds css to voting scene
+
         // Display movies from VotingRoom
         TitledPane allMoviesPane = new TitledPane(); //this makes sections for movies directors and actors
         allMoviesPane.setText("Vote for Movies");
         allMoviesPane.setExpanded(false);
         VBox allMoviesContent = new VBox();
+
         //director TitledPane
         TitledPane directorSectionPane = new TitledPane();
         directorSectionPane.setText("Vote for Directors");
         directorSectionPane.setExpanded(false);
         VBox allDirectorContent = new VBox();
+
         //actor TitledPane
         TitledPane actorSectionPane = new TitledPane();
         actorSectionPane.setText("Vote for Actors");
         actorSectionPane.setExpanded(false);
         VBox allActorContent = new VBox();
+
         //toggle groups
         ToggleGroup movies = new ToggleGroup(); //all movies are under this toggle group
         ToggleGroup directors = new ToggleGroup(); //toggle group for directors
@@ -92,6 +97,7 @@ public class VotingScene extends Scene {
         actorSectionPane.setContent(allActorContent);
         pane.getChildren().add(actorSectionPane);
 
+        //error message is shown when there is some radiobuttons which were not chosen
         Label errorMessageLabel = new Label("");
         errorMessageLabel.setTextFill(Color.RED);
         errorMessageLabel.setPadding(new Insets(5, 0, 0, 5));
@@ -102,7 +108,7 @@ public class VotingScene extends Scene {
         votebutton.setPadding(new Insets(10, 10, 10, 10));
         pane.getChildren().add(votebutton);
 
-
+        //sets buttons on action
         vote.setOnAction(e -> {
             RadioButton selectedRadioButtonMovie = (RadioButton) movies.getSelectedToggle();
             RadioButton selectedRadioButtonDirector = (RadioButton) directors.getSelectedToggle();
@@ -125,23 +131,28 @@ public class VotingScene extends Scene {
             } else
             {
                 errorMessageLabel.setText("You have to choose from each category!");
-                PauseTransition pause = new PauseTransition(Duration.seconds(0.4)); //makes smoother transition showing the error message
+                PauseTransition pause = new PauseTransition(Duration.seconds(0.25)); //makes smoother transition showing the error message
                 pause.setOnFinished(event -> {
                     if (selectedRadioButtonMovie == null)
                     {
                         allMoviesPane.setExpanded(true);
+                        allMoviesContent.setStyle("-fx-background-color: rgba(255, 0, 0, 0.7);");
+
                     } else if (selectedRadioButtonActor == null)
                     {
+                        allActorContent.setStyle("-fx-background-color: rgba(255, 0, 0, 0.7);");
                         actorSectionPane.setExpanded(true);
                     } else if (selectedRadioButtonDirector == null)
                     {
                         directorSectionPane.setExpanded(true);
+                        allDirectorContent.setStyle("-fx-background-color: rgba(255, 0, 0, 0.7);");
                     }
                 });
                 pause.play(); // Start the pause transition
             }
         });
 
+        //lets you submit votes by hitting enter
         EventHandler<KeyEvent> enterEventHandler = event -> {
             if (event.getCode() == KeyCode.ENTER)
             {

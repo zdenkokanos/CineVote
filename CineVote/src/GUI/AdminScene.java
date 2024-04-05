@@ -1,6 +1,5 @@
 package GUI;
 
-import CanBeVoted.Movie;
 import Voters.Admin;
 import VotingRoom.*;
 import javafx.collections.FXCollections;
@@ -41,13 +40,13 @@ public class AdminScene extends Scene {
     private ComboBox<String> graphSelector;
 
     public AdminScene(Stage stage, VotingRoom votingRoom, Admin admin) {
+        //sets the pane and the main elements
         super(new AnchorPane(), 500, 600, Color.LIGHTGRAY);
         AnchorPane root = (AnchorPane) getRoot();
-
         VBox vbox = new VBox();
         vbox.setAlignment(Pos.CENTER);
 
-        // Load the notification icon
+        // Load the notification icon and its count of notifications in small red circle
         Image notificationImage = new Image(getClass().getResourceAsStream("/notificationIcon.png"));
         if (notificationImage != null)
         {
@@ -79,6 +78,7 @@ public class AdminScene extends Scene {
             System.err.println("Failed to load notification icon.");
         }
 
+        //sets buttons on action
         addMovie.setOnAction(e -> {
             AddMovieScene addMovieScene = new AddMovieScene(stage, votingRoom, admin, "Nominate movies");
             stage.setScene(addMovieScene);
@@ -130,10 +130,9 @@ public class AdminScene extends Scene {
         // Initialize the graph selector ComboBox
         graphSelector = new ComboBox<>();
         graphSelector.setPromptText("Movies");
-        ObservableList<String> graphOptions = FXCollections.observableArrayList(
-                "Movies", "Actors", "Directors" // graph options
-        );
+        ObservableList<String> graphOptions = FXCollections.observableArrayList("Movies", "Actors", "Directors");
         graphSelector.setItems(graphOptions);
+        //graphSelector to change which graph you want to look at
         graphSelector.setOnAction(e -> {
             String selectedGraph = graphSelector.getValue();
             if (selectedGraph != null)
@@ -148,13 +147,13 @@ public class AdminScene extends Scene {
                         break;
                     case "Actors":
                         barChartActors.getData().clear();
-                        barChartActors.getData().add(votingRoomObserver.update(votingRoom.getActors(),barChartActors));
+                        barChartActors.getData().add(votingRoomObserver.update(votingRoom.getActors(), barChartActors));
                         vBoxBarCharts.getChildren().clear();
                         vBoxBarCharts.getChildren().add(barChartActors);
                         break;
                     case "Directors":
                         barChartDirectors.getData().clear();
-                        barChartDirectors.getData().add(votingRoomObserver.update(votingRoom.getDirectors(),barChartDirectors));
+                        barChartDirectors.getData().add(votingRoomObserver.update(votingRoom.getDirectors(), barChartDirectors));
                         vBoxBarCharts.getChildren().clear();
                         vBoxBarCharts.getChildren().add(barChartDirectors);
                         break;
@@ -162,6 +161,7 @@ public class AdminScene extends Scene {
             }
         });
 
+        //adds the elements to the pane
         vbox.getChildren().addAll(vBoxBarCharts, addMovie, startNew, logOut, exit);
         root.getChildren().addAll(vbox, notifications, notificationStackPane, graphSelector);
 
