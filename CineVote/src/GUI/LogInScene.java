@@ -106,6 +106,7 @@ public class LogInScene extends Scene {
         });
 
         register.setOnAction(e -> {
+            exists = false;
             username = usernameInput.getText();
             password = passwordInput.getText();
             if (username.isEmpty() || password.isEmpty())
