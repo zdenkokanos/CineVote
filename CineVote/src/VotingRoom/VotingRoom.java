@@ -6,17 +6,16 @@ import Voters.*;
 import java.io.*;
 import java.util.*;
 
-//spravit nejaky passport pre film ktory bude drzat typ ako kategoriu a zaroven aj metodu na to aby to vypisalo pri informaciach o filme
-//postacuje agregácia ale treba spraviť vlastnú
-//observera dat do vlastnej classy
-//spravit v nej pole observerov a tam aj tu funkciu update ktoru zavolam v AdminScene
+//poznámky:
+    //spravit nejaky passport pre film ktory bude drzat typ ako kategoriu a zaroven aj metodu na to aby to vypisalo pri informaciach o filme
+    //postacuje agregácia ale treba spraviť vlastnú
 public class VotingRoom implements Serializable {
     private List<VotingObserver> observers; //návrhový vzor Observer
     private List<Movie> movies; //aggregation
     private List<Voters> voters; //aggregation
-    private List<Director> directors;
-    private List<Actor> actors;
-    private List<Movie> nominatedMovies;
+    private List<Director> directors; //aggregation
+    private List<Actor> actors; //aggregation
+    private List<Movie> nominatedMovies;   //aggregation
 
     public VotingRoom() {
         observers = new ArrayList<>();
@@ -93,8 +92,8 @@ public class VotingRoom implements Serializable {
         voters.add(new Admin("admin", "admin"));
         voters.add(new LowerClass("lower", "lower"));
         voters.add(new MiddleClass("middle", "middle"));
-        voters.add(new MovieExpert("movieexpert", "movie"));
-        voters.add(new AnalyzeExpert("analyze", "analyze"));
+        voters.add(new MovieExpert("movieexpert", "movieexpert"));
+        voters.add(new AnalyzeExpert("analyzeexpert", "analyzeexpert"));
     }
 
     public List<Movie> getMovies() {

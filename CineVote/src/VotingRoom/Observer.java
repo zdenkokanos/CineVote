@@ -18,17 +18,17 @@ public class Observer implements VotingObserver {
 
     public <T> XYChart.Series<String, Number> update(List<?> list, BarChart<String, Number> barChart) {
         XYChart.Series<String, Number> series = new XYChart.Series<>();
-        for (Object obj : list) {
-            if (obj instanceof Movie) {
-                Movie movie = (Movie) obj;
+        for (Object object : list) {
+            if (object instanceof Movie) {
+                Movie movie = (Movie) object;
                 series.getData().add(new XYChart.Data<>(movie.getTitle(), movie.getVotes()));
             }
-            if(obj instanceof Director){
-                Director director = (Director) obj;
+            if(object instanceof Director){
+                Director director = (Director) object;
                 series.getData().add(new XYChart.Data<>(director.getName(), director.getVotes()));
             }
-            if(obj instanceof Actor){
-                Actor actor = (Actor) obj;
+            if(object instanceof Actor){
+                Actor actor = (Actor) object;
                 series.getData().add(new XYChart.Data<>(actor.getName(), actor.getVotes()));
             }
         }

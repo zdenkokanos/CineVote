@@ -12,6 +12,7 @@ public class Admin extends Voters {
         super(username, password);
     }
 
+    //this method directly adds the movie to the voting room, no need to accept
     public void nominate(String movieName, String directorName, int directorAge, String actorName, int actorAge, int makeYear, VotingRoom votingRoom) {
         boolean foundDirector = false;
         boolean foundActor = false;
@@ -33,12 +34,12 @@ public class Admin extends Voters {
                 foundActor = true;
             }
         }
-        if (!foundDirector)
+        if (!foundDirector) //if the director isn't already created it creates a new instance of director
         {
             thisDirector = new Director(directorName, directorAge);
             votingRoom.addDirector(thisDirector);
         }
-        if (!foundActor)
+        if (!foundActor) //this proceeds the same but for the actor
         {
             thisActor = new Actor(actorName, actorAge);
             votingRoom.addActor(thisActor);

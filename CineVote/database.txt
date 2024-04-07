@@ -1,8 +1,0 @@
-admin
-admin
-
-usr1
-12345
-
-usr2
-123456

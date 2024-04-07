@@ -13,6 +13,7 @@ public abstract class Voters implements VotingProcess, Serializable{
         this.username = username;
         this.password = password;
     }
+
     public void vote(CanBeVoted canBeVoted){
         canBeVoted.addVote(1);
         voted();

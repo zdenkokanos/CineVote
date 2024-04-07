@@ -104,8 +104,8 @@ public class AdminScene extends Scene {
         // Bar Chart Movies
         CategoryAxis xAxis = new CategoryAxis();
         NumberAxis yAxis = new NumberAxis();
-        yAxis.setTickUnit(2);
         barChartMovies = new BarChart<>(xAxis, yAxis);
+        yAxis.setTickUnit(2);
         yAxis.setLabel("Movies");
         barChartMovies.setTitle("Voting is still running...");
         barChartMovies.getData().clear();

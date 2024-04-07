@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface VotingObserver {
     void update(List<Movie> movies);
-    public <T> XYChart.Series<String, Number> update(List<?> movies, BarChart<String, Number> barChart);
+    <T> XYChart.Series<String, Number> update(List<?> movies, BarChart<String, Number> barChart);
 }

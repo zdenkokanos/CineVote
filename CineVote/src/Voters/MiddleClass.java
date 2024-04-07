@@ -9,6 +9,7 @@ public class MiddleClass extends Voters {
         super(username, password);
     }
 
+    //this method suggests movie for admin to accept it
     public void suggest_nomination(String movieName, String directorName, int directorAge, String actorName, int actorAge, int makeYear, VotingRoom votingRoom) {
         boolean foundDirector = false;
         boolean foundActor = false;

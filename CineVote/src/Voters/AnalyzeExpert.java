@@ -11,6 +11,8 @@ public class AnalyzeExpert extends MiddleClass {
         super(username, password);
     }
 
+    //this method overloads the suggest_nomination method of middle class, it has higher priority which means it is displayed on top of the list
+    @Override
     public void suggest_nomination(String movieName, String directorName, int directorAge, String actorName, int actorAge, int makeYear, VotingRoom votingRoom) {
         boolean foundDirector = false;
         boolean foundActor = false;
