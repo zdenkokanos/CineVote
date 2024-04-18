@@ -1,6 +1,7 @@
 package Voters;
 
 import CanBeVoted.Actor;
+import CanBeVoted.BankAccount;
 import CanBeVoted.Director;
 import CanBeVoted.Movie;
 import VotingRoom.*;
@@ -10,6 +11,10 @@ public class Admin extends Voters {
 
     public Admin(String username, String password) {
         super(username, password);
+    }
+
+    public Admin(String username, String password, BankAccount bankAccount) {
+        super(username, password, bankAccount);
     }
 
     //this method directly adds the movie to the voting room, no need to accept

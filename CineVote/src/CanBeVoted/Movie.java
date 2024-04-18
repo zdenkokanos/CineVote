@@ -1,7 +1,8 @@
 package CanBeVoted;
 
 import java.io.Serializable;
-
+//metoda informacie o kandidatovi
+//transparentny ucet na ktory sa da poslat a pozriet zostatok
 public class Movie extends CanBeVoted implements Serializable {
     private String title;
     private Director director;

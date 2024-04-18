@@ -7,8 +7,8 @@ import java.io.*;
 import java.util.*;
 
 //poznámky:
-    //spravit nejaky passport pre film ktory bude drzat typ ako kategoriu a zaroven aj metodu na to aby to vypisalo pri informaciach o filme
-    //postacuje agregácia ale treba spraviť vlastnú
+//spravit nejaky passport pre film ktory bude drzat typ ako kategoriu a zaroven aj metodu na to aby to vypisalo pri informaciach o filme
+//postacuje agregácia ale treba spraviť vlastnú
 public class VotingRoom implements Serializable {
     private List<VotingObserver> observers; //návrhový vzor Observer
     private List<Movie> movies; //aggregation
@@ -52,16 +52,26 @@ public class VotingRoom implements Serializable {
         directors.add(jackson);
         // Add other directors to the directors array
 
-        Actor dicaprio = new Actor("Leonardo DiCaprio", 45);
-        Actor robbins = new Actor("Tim Robbins", 63);
-        Actor brando = new Actor("Marlon Brando", 80);
-        Actor travolta = new Actor("John Travolta", 67);
-        Actor bale = new Actor("Christian Bale", 48);
-        Actor neeson = new Actor("Liam Neeson", 69);
-        Actor pitt = new Actor("Brad Pitt", 58);
-        Actor hanks = new Actor("Tom Hanks", 65);
-        Actor reeves = new Actor("Keanu Reeves", 57);
-        Actor wood = new Actor("Elijah Wood", 41);
+        Actor dicaprio = new Actor("Leonardo DiCaprio", 45, new BankAccount("SK3742462397422289572645",
+                "Tatra Banka", "TATRSKBX"));
+        Actor robbins = new Actor("Tim Robbins", 63, new BankAccount("SK3646472527639475623961",
+                "Prima Banka", "KOMASK2X"));
+        Actor brando = new Actor("Marlon Brando", 80, new BankAccount("SK0776382686276877392518",
+                "Unicredit", "BACXCZPP"));
+        Actor travolta = new Actor("John Travolta", 67, new BankAccount("SK9215833235933132996394",
+                "Unicredit", "BACXCZPP"));
+        Actor bale = new Actor("Christian Bale", 48, new BankAccount("SK4587883786186887898145",
+                "Prima Banka", "KOMASK2X"));
+        Actor neeson = new Actor("Liam Neeson", 69, new BankAccount("SK2922266682516937257835",
+                "Prima Banka", "KOMASK2X"));
+        Actor pitt = new Actor("Brad Pitt", 58, new BankAccount("SK4472397139862495814442",
+                "Tatra Banka", "TATRSKBX"));
+        Actor hanks = new Actor("Tom Hanks", 65, new BankAccount("SK8833811937227371832999",
+                "Tatra Banka", "TATRSKBX"));
+        Actor reeves = new Actor("Keanu Reeves", 57, new BankAccount("SK5289273242194196694814",
+                "Tatra Banka", "TATRSKBX"));
+        Actor wood = new Actor("Elijah Wood", 41, new BankAccount("SK4882867918151751175644",
+                "Tatra Banka", "TATRSKBX"));
         // Add other actors as needed
 
         actors.add(dicaprio);
@@ -89,11 +99,11 @@ public class VotingRoom implements Serializable {
     }
 
     public void makeVoters() {
-        voters.add(new Admin("admin", "admin"));
-        voters.add(new LowerClass("lower", "lower"));
-        voters.add(new MiddleClass("middle", "middle"));
-        voters.add(new MovieExpert("movieexpert", "movieexpert"));
-        voters.add(new AnalyzeExpert("analyzeexpert", "analyzeexpert"));
+        voters.add(new Admin("admin", "admin", new BankAccount(100)));
+        voters.add(new LowerClass("lower", "lower", new BankAccount(100)));
+        voters.add(new MiddleClass("middle", "middle", new BankAccount(100)));
+        voters.add(new MovieExpert("movieexpert", "movieexpert", new BankAccount(100)));
+        voters.add(new AnalyzeExpert("analyzeexpert", "analyzeexpert", new BankAccount(100)));
     }
 
     public List<Movie> getMovies() {
@@ -153,7 +163,6 @@ public class VotingRoom implements Serializable {
             System.out.println("No file found. Skipping loading.");
             return;
         }
-
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file)))
         {
             movies = (List<Movie>) in.readObject();

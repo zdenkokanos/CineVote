@@ -8,6 +8,9 @@ public class MiddleClass extends Voters {
     public MiddleClass(String username, String password) {
         super(username, password);
     }
+    public MiddleClass(String username, String password, BankAccount bankAccount) {
+        super(username, password, bankAccount);
+    }
 
     //this method suggests movie for admin to accept it
     public void suggest_nomination(String movieName, String directorName, int directorAge, String actorName, int actorAge, int makeYear, VotingRoom votingRoom) {

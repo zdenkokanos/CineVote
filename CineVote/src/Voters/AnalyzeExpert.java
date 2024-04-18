@@ -1,6 +1,7 @@
 package Voters;
 
 import CanBeVoted.Actor;
+import CanBeVoted.BankAccount;
 import CanBeVoted.Director;
 import VotingRoom.VotingRoom;
 import CanBeVoted.Movie;
@@ -9,6 +10,10 @@ public class AnalyzeExpert extends MiddleClass {
 
     public AnalyzeExpert(String username, String password) {
         super(username, password);
+    }
+
+    public AnalyzeExpert(String username, String password, BankAccount bankAccount) {
+        super(username, password, bankAccount);
     }
 
     //this method overloads the suggest_nomination method of middle class, it has higher priority which means it is displayed on top of the list

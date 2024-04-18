@@ -1,15 +1,13 @@
 package GUI;
 
 import Voters.*;
+import CanBeVoted.*;
 import Voters.LowerClass;
 import VotingRoom.VotingRoom;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
@@ -18,6 +16,7 @@ import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
+import static CanBeVoted.BankAccount.createAccount;
 
 public class LogInScene extends Scene {
 
@@ -123,6 +122,30 @@ public class LogInScene extends Scene {
                 }
                 if (!exists)
                 {
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Confirmation Dialog");
+                    alert.setHeaderText("Do you want to create a bank account?");
+
+                    // Add yes and no buttons
+                    alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
+
+                    // Show the alert and wait for user response
+                    alert.showAndWait().ifPresent(response -> {
+                        if (response == ButtonType.YES) {
+                            // User clicked yes, proceed with registration
+                            LowerClass voter = new LowerClass(username, password, createAccount(100));
+                            votingRoom.addVoter(voter);
+                            VotingScene votingScene = new VotingScene(votingRoom, voter, primaryStage);
+                            primaryStage.setScene(votingScene);
+                        }
+                        else if(response == ButtonType.NO){
+                            LowerClass voter = new LowerClass(username, password);
+                            votingRoom.addVoter(voter);
+                            VotingScene votingScene = new VotingScene(votingRoom, voter, primaryStage);
+                            primaryStage.setScene(votingScene);
+                        }
+                    });
+                    //here i want an alert if someone wants to create an account and a yes and no button
                     LowerClass voter = new LowerClass(username, password);
                     votingRoom.addVoter(voter);
                     VotingScene votingScene = new VotingScene(votingRoom, voter, primaryStage);
