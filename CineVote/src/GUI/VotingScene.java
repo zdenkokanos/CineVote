@@ -3,6 +3,7 @@ package GUI;
 import CanBeVoted.Actor;
 import CanBeVoted.Director;
 import Voters.Voters;
+import VotingRoom.People;
 import CanBeVoted.Movie;
 import VotingRoom.VotingRoom;
 import javafx.animation.PauseTransition;
@@ -27,11 +28,10 @@ import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 
 public class VotingScene extends Scene {
-    private MessageScene thankYouScene = new MessageScene("Thank you for your time!");
     private Button vote = new Button("Vote");
     private String css = this.getClass().getResource("votingScene.css").toExternalForm();
 
-    public VotingScene(VotingRoom votingRoom, Voters voter, Stage stage) {
+    public VotingScene(VotingRoom votingRoom, People voter, Stage stage) {
         //sets the pane and the main elements
         super(new ScrollPane(), 500, 600, Color.LIGHTGRAY);
         ScrollPane scrollPane = (ScrollPane) this.getRoot();
@@ -126,7 +126,15 @@ public class VotingScene extends Scene {
                 System.out.println("Selected director: " + selectedDirector.getName() + "\n***********************");
                 System.out.println("Selected actor: " + selectedActor.getName() + "\n***********************");
                 //printMovies(votingRoom); //if you want to print vote count after each voting session
-                stage.setScene(thankYouScene);
+                if (voter.getBankAccount() != null)
+                {
+                    MessageScene thankYouScene = new MessageScene("Thank you for your time!", voter, votingRoom);
+                    stage.setScene(thankYouScene);
+                } else
+                {
+                    MessageScene thankYouScene = new MessageScene("Thank you for your time!", votingRoom);
+                    stage.setScene(thankYouScene);
+                }
                 votingRoom.saveVotingRoom();
             } else
             {

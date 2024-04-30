@@ -2,6 +2,7 @@ package GUI;
 
 import Voters.*;
 import CanBeVoted.*;
+import VotingRoom.People;
 import Voters.LowerClass;
 import VotingRoom.VotingRoom;
 import javafx.event.EventHandler;
@@ -16,6 +17,7 @@ import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
+
 import static CanBeVoted.BankAccount.createAccount;
 
 public class LogInScene extends Scene {
@@ -25,13 +27,11 @@ public class LogInScene extends Scene {
     private String password;
     private boolean exists = false;
     private final Button register = new Button("Register");
-    private VotingRoom votingRoom = new VotingRoom();
     private TextField usernameInput = new TextField();
     private PasswordField passwordInput = new PasswordField();
-    private MessageScene alreadyVotedScene = new MessageScene("You have already voted!");
     private String css = this.getClass().getResource("login.css").toExternalForm();
 
-    public LogInScene(Stage primaryStage) {
+    public LogInScene(Stage primaryStage, VotingRoom votingRoom) {
         //sets the pane and the main elements
         super(new VBox(), 500, 600, Color.BLACK);
         VBox vBox = (VBox) getRoot();
@@ -68,7 +68,7 @@ public class LogInScene extends Scene {
 
         //set buttons on action
         logIn.setOnAction(e -> {
-            for (Voters voter : votingRoom.getVoters())
+            for (People voter : votingRoom.getVoters())
             {
                 // Check if the entered username and password match the voter's credentials
                 if (voter.getUsername().equals(usernameInput.getText()) && voter.getPassword().equals(passwordInput.getText()))
@@ -87,7 +87,15 @@ public class LogInScene extends Scene {
                             break;
                         } else
                         {
-                            primaryStage.setScene(alreadyVotedScene);
+                            if (voter.getBankAccount() != null)
+                            {
+                                MessageScene alreadyVotedScene = new MessageScene("You have already voted!", voter, votingRoom);
+                                primaryStage.setScene(alreadyVotedScene);
+                            }
+                            else{
+                                MessageScene alreadyVotedScene = new MessageScene("You have already voted!", votingRoom);
+                                primaryStage.setScene(alreadyVotedScene);
+                            }
                             break;
                         }
                     } else
@@ -113,7 +121,7 @@ public class LogInScene extends Scene {
                 errorMessageLabel.setText("You must enter username and password!");
             } else
             {
-                for (Voters voter : votingRoom.getVoters())
+                for (People voter : votingRoom.getVoters())
                 {
                     if (username.equals(voter.getUsername()))
                     {
@@ -131,25 +139,21 @@ public class LogInScene extends Scene {
 
                     // Show the alert and wait for user response
                     alert.showAndWait().ifPresent(response -> {
-                        if (response == ButtonType.YES) {
+                        if (response == ButtonType.YES)
+                        {
                             // User clicked yes, proceed with registration
                             LowerClass voter = new LowerClass(username, password, createAccount(100));
                             votingRoom.addVoter(voter);
                             VotingScene votingScene = new VotingScene(votingRoom, voter, primaryStage);
                             primaryStage.setScene(votingScene);
-                        }
-                        else if(response == ButtonType.NO){
+                        } else if (response == ButtonType.NO)
+                        {
                             LowerClass voter = new LowerClass(username, password);
                             votingRoom.addVoter(voter);
                             VotingScene votingScene = new VotingScene(votingRoom, voter, primaryStage);
                             primaryStage.setScene(votingScene);
                         }
                     });
-                    //here i want an alert if someone wants to create an account and a yes and no button
-                    LowerClass voter = new LowerClass(username, password);
-                    votingRoom.addVoter(voter);
-                    VotingScene votingScene = new VotingScene(votingRoom, voter, primaryStage);
-                    primaryStage.setScene(votingScene); // If match found, switch to voting scene
                 } else
                 {
                     errorMessageLabel.setText("This user already exists, please log in!");

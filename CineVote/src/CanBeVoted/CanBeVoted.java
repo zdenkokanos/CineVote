@@ -16,4 +16,5 @@ public abstract class CanBeVoted implements Serializable {
     public int getVotes() {
         return votes;
     }
+
 }

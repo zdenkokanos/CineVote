@@ -12,10 +12,12 @@ import java.util.*;
 public class VotingRoom implements Serializable {
     private List<VotingObserver> observers; //návrhový vzor Observer
     private List<Movie> movies; //aggregation
-    private List<Voters> voters; //aggregation
+    private List<People> voters; //aggregation
     private List<Director> directors; //aggregation
     private List<Actor> actors; //aggregation
     private List<Movie> nominatedMovies;   //aggregation
+
+    private boolean on_going;
 
     public VotingRoom() {
         observers = new ArrayList<>();
@@ -23,6 +25,7 @@ public class VotingRoom implements Serializable {
         voters = new ArrayList<>();
         directors = new ArrayList<>();
         actors = new ArrayList<>();
+        this.on_going = true;
 
         nominatedMovies = new ArrayList<>(); //movies which were nominated to be accepted by admin
         populateMovies();
@@ -30,15 +33,24 @@ public class VotingRoom implements Serializable {
     }
 
     public void populateMovies() {
-        Director nolan = new Director("Christopher Nolan", 50);
-        Director darabont = new Director("Frank Darabont", 62);
-        Director coppola = new Director("Francis Ford Coppola", 82);
-        Director tarantino = new Director("Quentin Tarantino", 58);
-        Director spielberg = new Director("Steven Spielberg", 75);
-        Director fincher = new Director("David Fincher", 59);
-        Director zemeckis = new Director("Robert Zemeckis", 70);
-        Director wachowski = new Director("Lana Wachowski", 54);
-        Director jackson = new Director("Peter Jackson", 60);
+        Director nolan = new Director("Christopher Nolan", 50, new BankAccount("SK7424335535497194675425",
+                "Prima Banka", "KOMASK2X"));
+        Director darabont = new Director("Frank Darabont", 62, new BankAccount("SK9891431716787324639574",
+                "Tatra Banka", "TATRSKBX"));
+        Director coppola = new Director("Francis Ford Coppola", 82, new BankAccount("SK9236312673445174713253",
+                "Unicredit", "BACXCZPP"));
+        Director tarantino = new Director("Quentin Tarantino", 58, new BankAccount("SK7876432521192919844289",
+                "Tatra Banka", "TATRSKBX"));
+        Director spielberg = new Director("Steven Spielberg", 75, new BankAccount("SK5229572261864387974517",
+                "Unicredit", "BACXCZPP"));
+        Director fincher = new Director("David Fincher", 59, new BankAccount("SK7599457568469925325714",
+                "Tatra Banka", "TATRSKBX"));
+        Director zemeckis = new Director("Robert Zemeckis", 70, new BankAccount("SK6451941995262469936322",
+                "Tatra Banka", "TATRSKBX"));
+        Director wachowski = new Director("Lana Wachowski", 54, new BankAccount("SK6866695673559324876362",
+                "Unicredit", "BACXCZPP"));
+        Director jackson = new Director("Peter Jackson", 60, new BankAccount("SK3056628357872576753787",
+                "Prima Banka", "KOMASK2X"));
         // Add other directors as needed
 
         directors.add(nolan);
@@ -50,6 +62,15 @@ public class VotingRoom implements Serializable {
         directors.add(zemeckis);
         directors.add(wachowski);
         directors.add(jackson);
+        voters.add(nolan);
+        voters.add(darabont);
+        voters.add(coppola);
+        voters.add(tarantino);
+        voters.add(spielberg);
+        voters.add(fincher);
+        voters.add(zemeckis);
+        voters.add(wachowski);
+        voters.add(jackson);
         // Add other directors to the directors array
 
         Actor dicaprio = new Actor("Leonardo DiCaprio", 45, new BankAccount("SK3742462397422289572645",
@@ -84,6 +105,16 @@ public class VotingRoom implements Serializable {
         actors.add(hanks);
         actors.add(reeves);
         actors.add(wood);
+        voters.add(dicaprio);
+        voters.add(robbins);
+        voters.add(brando);
+        voters.add(travolta);
+        voters.add(bale);
+        voters.add(neeson);
+        voters.add(pitt);
+        voters.add(hanks);
+        voters.add(reeves);
+        voters.add(wood);
         // Add other actors to the actors array
 
         movies.add(new Movie("Inception", nolan, dicaprio, 2010));
@@ -110,7 +141,7 @@ public class VotingRoom implements Serializable {
         return movies;
     }
 
-    public List<Voters> getVoters() {
+    public List<People> getVoters() {
         return voters;
     }
 
@@ -148,6 +179,7 @@ public class VotingRoom implements Serializable {
             out.writeObject(nominatedMovies);
             out.writeObject(actors);
             out.writeObject(directors);
+            out.writeBoolean(on_going);
             System.out.println("VotingRoom object has been serialized and saved.");
 
         } catch (IOException e)
@@ -166,15 +198,24 @@ public class VotingRoom implements Serializable {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file)))
         {
             movies = (List<Movie>) in.readObject();
-            voters = (List<Voters>) in.readObject();
+            voters = (List<People>) in.readObject();
             nominatedMovies = (List<Movie>) in.readObject();
             actors = (List<Actor>) in.readObject();
             directors = (List<Director>) in.readObject();
+            this.on_going = in.readBoolean();
             System.out.println("VotingRoom object has been deserialized and loaded.");
         } catch (IOException | ClassNotFoundException e)
         {
             e.printStackTrace();
         }
+    }
+
+    public boolean getStatus(){
+        return on_going;
+    }
+
+    public void setStatus(boolean status){
+        this.on_going = status;
     }
 
     public List<Director> getDirectors() {
@@ -225,6 +266,25 @@ public class VotingRoom implements Serializable {
         {
             observer.update(movies);
         }
+    }
+
+    //sorting and returning winners of the voting using lambda expression
+    public List<Movie> getWinnersMovies() {
+        List<Movie> sortedMovies = new ArrayList<>(movies);
+        Collections.sort(sortedMovies, (a, b) -> Integer.compare(b.getVotes(), a.getVotes()));
+        return sortedMovies;
+    }
+
+    public List<Actor> getWinnersActors() {
+        List<Actor> sortedActors = new ArrayList<>(actors);
+        Collections.sort(sortedActors, (a, b) -> Integer.compare(b.getVotes(), a.getVotes()));
+        return sortedActors;
+    }
+
+    public List<Director> getWinnersDirectors() {
+        List<Director> sortedDirectors = new ArrayList<>(directors);
+        Collections.sort(sortedDirectors, (a, b) -> Integer.compare(b.getVotes(), a.getVotes()));
+        return sortedDirectors;
     }
 
     public void restartVoting() {

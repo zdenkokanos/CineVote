@@ -2,6 +2,7 @@ package GUI;
 
 import Voters.*;
 import VotingRoom.VotingRoom;
+import VotingRoom.People;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -16,7 +17,7 @@ public class ExitScene extends Scene {
     private Button logOut = new Button("Log out");
     private Button exitB = new Button("Exit");
 
-    public ExitScene(VotingRoom votingRoom, Stage stage, Voters voter) {
+    public ExitScene(VotingRoom votingRoom, Stage stage, People voter) {
         //sets the pane and the main elements
         super(new VBox(), 500, 500, Color.LIGHTGRAY);
         VBox vbox = (VBox) getRoot();
@@ -44,7 +45,7 @@ public class ExitScene extends Scene {
             }
         });
         logOut.setOnAction(e -> { //this buttons lets you logOut and log In as a different user so you don't have to log back on
-            stage.setScene(new LogInScene(stage));
+            stage.setScene(new LogInScene(stage, votingRoom));
         });
         vbox.getChildren().addAll(messageLabel, continueB, logOut,exitB);
     }

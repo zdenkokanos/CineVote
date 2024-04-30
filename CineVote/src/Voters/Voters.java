@@ -5,7 +5,7 @@ import VotingRoom.*;
 
 import java.io.*;
 
-public abstract class Voters implements VotingProcess, Serializable, People {
+public abstract class Voters implements VotingProcess, Serializable, People{
     private String username;
     private String password;
     private boolean voted;
@@ -41,5 +41,17 @@ public abstract class Voters implements VotingProcess, Serializable, People {
 
     public void voted() {
         this.voted = true;
+    }
+
+    public float getBalance() {
+        return bankAccount.getBalance();
+    }
+    public void pay(BankAccount bankAccount, float value) {
+        this.bankAccount.setBalance(-value);
+        bankAccount.payment(value);
+    }
+
+    public BankAccount getBankAccount(){
+        return bankAccount;
     }
 }

@@ -2,6 +2,7 @@ package GUI;
 
 import Voters.*;
 import VotingRoom.VotingRoom;
+import VotingRoom.People;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.VBox;
@@ -26,7 +27,7 @@ public class AddMovieScene extends Scene {
     private Button submit = new Button("Submit");
     private String css = this.getClass().getResource("main.css").toExternalForm();
 
-    public AddMovieScene(Stage stage, VotingRoom votingRoom, Voters voter, String message) {
+    public AddMovieScene(Stage stage, VotingRoom votingRoom, People voter, String message) {
         //sets the pane and the main elements
         super(new VBox(), 500, 600, Color.LIGHTGRAY);
         VBox vBox = (VBox) getRoot();

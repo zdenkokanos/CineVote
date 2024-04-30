@@ -92,11 +92,14 @@ public class AdminScene extends Scene {
         exit.setOnAction(e -> stage.close());
 
         startNew.setOnAction(e -> {
-            votingRoom.restartVoting();
+            //votingRoom.restartVoting();
+            votingRoom.setStatus(false);
+            votingRoom.saveVotingRoom();
+            System.out.println(votingRoom.getStatus());
             stage.close();
         });
 
-        logOut.setOnAction(e -> stage.setScene(new LogInScene(stage)));
+        logOut.setOnAction(e -> stage.setScene(new LogInScene(stage, votingRoom)));
         //Observer
         votingRoomObserver = new Observer(votingRoom);
         votingRoom.addObserver(votingRoomObserver);

@@ -3,10 +3,10 @@ package CanBeVoted;
 import java.io.Serializable;
 
 public class BankAccount implements Serializable {
-    String IBAN;
-    String bank;
-    String BIC_CODE;
-    float balance;
+    private String IBAN;
+    private String bank;
+    private String BIC_CODE;
+    private float balance;
 
     public BankAccount(float balance){ //each user with privilege to vote can donate up to 100$
         this.balance = balance;
@@ -21,5 +21,14 @@ public class BankAccount implements Serializable {
     public static BankAccount createAccount(float balance){
         BankAccount account = new BankAccount(balance);
         return account;
+    }
+    public float getBalance(){
+        return balance;
+    }
+    public void payment(float value){
+        this.balance+=value;
+    }
+    public void setBalance(float value){
+        this.balance+=value;
     }
 }
