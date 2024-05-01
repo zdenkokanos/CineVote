@@ -210,11 +210,11 @@ public class VotingRoom implements Serializable {
         }
     }
 
-    public boolean getStatus(){
+    public boolean getStatus() {
         return on_going;
     }
 
-    public void setStatus(boolean status){
+    public void setStatus(boolean status) {
         this.on_going = status;
     }
 
@@ -256,6 +256,9 @@ public class VotingRoom implements Serializable {
     public void addObserver(VotingObserver observer) {
         observers.add(observer);
     }
+    public Winners getWinners(){
+        return new Winners(movies, actors, directors);
+    }
 
     public void removeObserver(VotingObserver observer) {
         observers.remove(observer);
@@ -269,23 +272,7 @@ public class VotingRoom implements Serializable {
     }
 
     //sorting and returning winners of the voting using lambda expression
-    public List<Movie> getWinnersMovies() {
-        List<Movie> sortedMovies = new ArrayList<>(movies);
-        Collections.sort(sortedMovies, (a, b) -> Integer.compare(b.getVotes(), a.getVotes()));
-        return sortedMovies;
-    }
 
-    public List<Actor> getWinnersActors() {
-        List<Actor> sortedActors = new ArrayList<>(actors);
-        Collections.sort(sortedActors, (a, b) -> Integer.compare(b.getVotes(), a.getVotes()));
-        return sortedActors;
-    }
-
-    public List<Director> getWinnersDirectors() {
-        List<Director> sortedDirectors = new ArrayList<>(directors);
-        Collections.sort(sortedDirectors, (a, b) -> Integer.compare(b.getVotes(), a.getVotes()));
-        return sortedDirectors;
-    }
 
     public void restartVoting() {
         File fileToDelete = new File("voting.ser");
@@ -307,6 +294,37 @@ public class VotingRoom implements Serializable {
         } else
         {
             System.out.println("File does not exist.");
+        }
+    }
+
+    //this class manages the sorting and returning winners in each category and is nested class
+    public class Winners {
+        private List<Movie> movies;
+        private List<Actor> actors;
+        private List<Director> directors;
+
+        public Winners(List<Movie> movies, List<Actor> actors, List<Director> directors) {
+            this.movies = movies;
+            this.actors = actors;
+            this.directors = directors;
+        }
+
+        public List<Movie> getWinnersMovies() {
+            List<Movie> sortedMovies = new ArrayList<>(movies);
+            Collections.sort(sortedMovies, (a, b) -> Integer.compare(b.getVotes(), a.getVotes()));
+            return sortedMovies;
+        }
+
+        public List<Actor> getWinnersActors() {
+            List<Actor> sortedActors = new ArrayList<>(actors);
+            Collections.sort(sortedActors, (a, b) -> Integer.compare(b.getVotes(), a.getVotes()));
+            return sortedActors;
+        }
+
+        public List<Director> getWinnersDirectors() {
+            List<Director> sortedDirectors = new ArrayList<>(directors);
+            Collections.sort(sortedDirectors, (a, b) -> Integer.compare(b.getVotes(), a.getVotes()));
+            return sortedDirectors;
         }
     }
 }

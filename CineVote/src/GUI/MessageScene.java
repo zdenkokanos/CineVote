@@ -7,10 +7,7 @@ import VotingRoom.People;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
@@ -21,6 +18,7 @@ import javafx.stage.Stage;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class MessageScene extends Scene {
     private String css = this.getClass().getResource("main.css").toExternalForm();
@@ -71,39 +69,41 @@ public class MessageScene extends Scene {
         });
 
         submitDonation.setOnAction(e -> {
-            // Handle donation submission here
             AccountItem selectedItem = accountDropdown.getValue();
-            if (accountDropdown.getSelectionModel().isEmpty() || "Choose account".equals(accountDropdown.getValue()))
-            {
+            if (accountDropdown.getSelectionModel().isEmpty() || "Choose account".equals(accountDropdown.getValue())) {
                 errorMessageLabel.setText("Please select an account to donate to.");
                 return; // Exit the method early if no account is selected
             }
             String donationAmountText = donationInput.getText();
-            try
-            {
+            try {
                 float donationAmount = Float.parseFloat(donationAmountText);
                 Payable selectedAccount = selectedItem.getPayable();
-                System.out.println("Account to pay " + selectedAccount.getName());
-                if (donationAmount <= voter.getBalance())
-                {
-                    // Proceed with the donation amount
-                    voter.pay(selectedAccount.getAccount(), donationAmount);
-                    currentBalance.setText("Your current balance is: " + String.format("%.2f", voter.getBalance()) + " €");
-                    votingRoom.saveVotingRoom();
-                } else
-                {
-                    errorMessageLabel.setText("Insufficient balance to make the donation.");
-                }
 
-                // Proceed with the donation amount
-            } catch (NumberFormatException ex)
-            {
-                // Handle the case where the input is not a valid float
+                // Confirmation dialog
+                Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
+                confirmDialog.setTitle("Confirm Donation");
+                confirmDialog.setHeaderText("Are you sure you want to donate €" + String.format("%.2f", donationAmount) + " to " + selectedAccount.getName() + "?");
+                confirmDialog.setContentText("This action cannot be undone.");
+
+                Optional<ButtonType> result = confirmDialog.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    // User confirmed the donation
+                    if (donationAmount <= voter.getBalance()) {
+                        voter.pay(selectedAccount.getAccount(), donationAmount);
+                        currentBalance.setText("Your current balance is: " + String.format("%.2f", voter.getBalance()) + " €");
+                        errorMessageLabel.setText("Donation successful.");
+                        votingRoom.saveVotingRoom();
+                    } else {
+                        errorMessageLabel.setText("Insufficient balance to make the donation.");
+                    }
+                } else {
+                    // User cancelled the donation
+                    errorMessageLabel.setText("Donation cancelled.");
+                }
+            } catch (NumberFormatException ex) {
                 errorMessageLabel.setText("Invalid donation amount: " + donationAmountText); //display error under button
             }
             System.out.println("button to pay was hit");
-
-
         });
 
 

@@ -26,7 +26,7 @@ import javafx.stage.Stage;
 
 public class AdminScene extends Scene {
     private Button addMovie = new Button("Add movies");
-    private Button startNew = new Button("Start new voting");
+    private Button startNew = new Button("Stop ongoing voting");
     private Button notifications = new Button("");
     private StackPane notificationStackPane = new StackPane();
     private Button exit = new Button("Exit");
@@ -96,7 +96,8 @@ public class AdminScene extends Scene {
             votingRoom.setStatus(false);
             votingRoom.saveVotingRoom();
             System.out.println(votingRoom.getStatus());
-            stage.close();
+            Results results = new Results(stage, votingRoom);
+            stage.setScene(results);
         });
 
         logOut.setOnAction(e -> stage.setScene(new LogInScene(stage, votingRoom)));
