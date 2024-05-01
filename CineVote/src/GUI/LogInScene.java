@@ -2,7 +2,7 @@ package GUI;
 
 import Voters.*;
 import CanBeVoted.*;
-import VotingRoom.People;
+import VotingRoom.*;
 import Voters.LowerClass;
 import VotingRoom.VotingRoom;
 import javafx.event.EventHandler;
@@ -19,9 +19,13 @@ import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
 
 import static CanBeVoted.BankAccount.createAccount;
-
+/**
+ * Trieda LogInScene poskytuje užívateľské rozhranie pre prihlásenie do hlasovacieho systému
+ * a registráciu nových užívateľov. Umožňuje užívateľom zadať svoje používateľské meno a heslo na prihlásenie,
+ * alebo vytvoriť nový účet, ak ešte nemajú svoj vlastný. Scéna je nastavená s jednoduchým
+ * formulárom pre vstup od užívateľa a tlačidlami na odoslanie prihlasovacích alebo registračných formulárov.
+ */
 public class LogInScene extends Scene {
-
     private final Button logIn = new Button("Log In");
     private String username;
     private String password;
@@ -31,6 +35,13 @@ public class LogInScene extends Scene {
     private PasswordField passwordInput = new PasswordField();
     private String css = this.getClass().getResource("login.css").toExternalForm();
 
+    /**
+     * Konštruktor pre triedu LogInScene, ktorý inicializuje grafické rozhranie pre prihlásenie a registráciu.
+     * Vytvorí všetky potrebné grafické komponenty a pridá ich do scény.
+     *
+     * @param primaryStage hlavné okno aplikácie, kde bude scéna zobrazená
+     * @param votingRoom referencia na objekt VotingRoom, ktorý obsahuje údaje o hlasovacích voličoch a procesoch
+     */
     public LogInScene(Stage primaryStage, VotingRoom votingRoom) {
         //sets the pane and the main elements
         super(new VBox(), 500, 600, Color.BLACK);
@@ -91,8 +102,8 @@ public class LogInScene extends Scene {
                             {
                                 MessageScene alreadyVotedScene = new MessageScene("You have already voted!", voter, votingRoom);
                                 primaryStage.setScene(alreadyVotedScene);
-                            }
-                            else{
+                            } else
+                            {
                                 MessageScene alreadyVotedScene = new MessageScene("You have already voted!", votingRoom);
                                 primaryStage.setScene(alreadyVotedScene);
                             }
@@ -116,48 +127,54 @@ public class LogInScene extends Scene {
             exists = false;
             username = usernameInput.getText();
             password = passwordInput.getText();
-            if (username.isEmpty() || password.isEmpty())
+            try
             {
-                errorMessageLabel.setText("You must enter username and password!");
-            } else
-            {
-                for (People voter : votingRoom.getVoters())
+                if (username.isEmpty() || password.isEmpty())
                 {
-                    if (username.equals(voter.getUsername()))
-                    {
-                        exists = true;
-                    }
-                }
-                if (!exists)
-                {
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("Confirmation Dialog");
-                    alert.setHeaderText("Do you want to create a bank account?");
-
-                    // Add yes and no buttons
-                    alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
-
-                    // Show the alert and wait for user response
-                    alert.showAndWait().ifPresent(response -> {
-                        if (response == ButtonType.YES)
-                        {
-                            // User clicked yes, proceed with registration
-                            LowerClass voter = new LowerClass(username, password, createAccount(100));
-                            votingRoom.addVoter(voter);
-                            VotingScene votingScene = new VotingScene(votingRoom, voter, primaryStage);
-                            primaryStage.setScene(votingScene);
-                        } else if (response == ButtonType.NO)
-                        {
-                            LowerClass voter = new LowerClass(username, password);
-                            votingRoom.addVoter(voter);
-                            VotingScene votingScene = new VotingScene(votingRoom, voter, primaryStage);
-                            primaryStage.setScene(votingScene);
-                        }
-                    });
+                    throw new BlankInputException("Username and password fields cannot be blank.");
                 } else
                 {
-                    errorMessageLabel.setText("This user already exists, please log in!");
+                    for (People voter : votingRoom.getVoters())
+                    {
+                        if (username.equals(voter.getUsername()))
+                        {
+                            exists = true;
+                        }
+                    }
+                    if (!exists)
+                    {
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Confirmation Dialog");
+                        alert.setHeaderText("Do you want to create a bank account?");
+
+                        // Add yes and no buttons
+                        alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
+
+                        // Show the alert and wait for user response
+                        alert.showAndWait().ifPresent(response -> {
+                            if (response == ButtonType.YES)
+                            {
+                                // User clicked yes, proceed with registration
+                                LowerClass voter = new LowerClass(username, password, createAccount(100));
+                                votingRoom.addVoter(voter);
+                                VotingScene votingScene = new VotingScene(votingRoom, voter, primaryStage);
+                                primaryStage.setScene(votingScene);
+                            } else if (response == ButtonType.NO)
+                            {
+                                LowerClass voter = new LowerClass(username, password);
+                                votingRoom.addVoter(voter);
+                                VotingScene votingScene = new VotingScene(votingRoom, voter, primaryStage);
+                                primaryStage.setScene(votingScene);
+                            }
+                        });
+                    } else
+                    {
+                        errorMessageLabel.setText("This user already exists, please log in!");
+                    }
                 }
+            } catch (BlankInputException ex)
+            {
+                errorMessageLabel.setText(ex.getMessage());
             }
         });
 

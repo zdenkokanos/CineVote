@@ -6,19 +6,22 @@ import Voters.*;
 import java.io.*;
 import java.util.*;
 
-//poznámky:
-//spravit nejaky passport pre film ktory bude drzat typ ako kategoriu a zaroven aj metodu na to aby to vypisalo pri informaciach o filme
-//postacuje agregácia ale treba spraviť vlastnú
+/**
+ * Trieda VotingRoom je centrálne miesto pre správu hlasovacieho procesu.
+ * Zodpovedá za udržiavanie zoznamov filmov, režisérov, hercov, voličov a za riadenie hlasovacích aktivít.
+ */
 public class VotingRoom implements Serializable {
-    private List<VotingObserver> observers; //návrhový vzor Observer
-    private List<Movie> movies; //aggregation
-    private List<People> voters; //aggregation
-    private List<Director> directors; //aggregation
-    private List<Actor> actors; //aggregation
-    private List<Movie> nominatedMovies;   //aggregation
+    private List<VotingObserver> observers; // Sledovatelia zmien v hlasovacích dátach
+    private List<Movie> movies; // Zoznam filmov dostupných na hlasovanie
+    private List<People> voters; // Zoznam voličov
+    private List<Director> directors; // Zoznam režisérov
+    private List<Actor> actors; // Zoznam hercov
+    private List<Movie> nominatedMovies; // Zoznam filmov čakajúcich na schválenie
+    private boolean on_going; //Hovorí o priebehu hlasovania
 
-    private boolean on_going;
-
+    /**
+     * Konštruktor pre VotingRoom inicializuje zoznamy a začína hlasovací proces.
+     */
     public VotingRoom() {
         observers = new ArrayList<>();
         movies = new ArrayList<>();
@@ -27,11 +30,14 @@ public class VotingRoom implements Serializable {
         actors = new ArrayList<>();
         this.on_going = true;
 
-        nominatedMovies = new ArrayList<>(); //movies which were nominated to be accepted by admin
+        nominatedMovies = new ArrayList<>(); // Filmy čakajúce na schválenie adminom
         populateMovies();
         makeVoters();
     }
 
+    /**
+     * Vytvára vzorový zoznam filmov, režisérov a hercov pre hlasovanie.
+     */
     public void populateMovies() {
         Director nolan = new Director("Christopher Nolan", 50, new BankAccount("SK7424335535497194675425",
                 "Prima Banka", "KOMASK2X"));
@@ -129,6 +135,9 @@ public class VotingRoom implements Serializable {
         movies.add(new Movie("The Lord of the Rings: The Fellowship of the Ring", jackson, wood, 2001));
     }
 
+    /**
+     * Inicializuje zoznam voličov.
+     */
     public void makeVoters() {
         voters.add(new Admin("admin", "admin", new BankAccount(100)));
         voters.add(new LowerClass("lower", "lower", new BankAccount(100)));
@@ -137,14 +146,29 @@ public class VotingRoom implements Serializable {
         voters.add(new AnalyzeExpert("analyzeexpert", "analyzeexpert", new BankAccount(100)));
     }
 
+    /**
+     * Vráti zoznam všetkých filmov.
+     *
+     * @return Zoznam filmov
+     */
     public List<Movie> getMovies() {
         return movies;
     }
 
+    /**
+     * Vráti zoznam všetkých voličov.
+     *
+     * @return Zoznam voličov
+     */
     public List<People> getVoters() {
         return voters;
     }
 
+    /**
+     * Pridá film do zoznamu filmov.
+     *
+     * @param movie Film na pridanie
+     */
     public void addMovie(Movie movie) {
         movies.add(movie);
     }
@@ -154,21 +178,34 @@ public class VotingRoom implements Serializable {
         voters.add(voter);
     }
 
-    public void suggestNominaation(Movie movie, int priority) {
+    /**
+     * Navrhne nomináciu filmu s určitou prioritou.
+     *
+     * @param movie    Film na nomináciu
+     * @param priority Priorita nominácie
+     */
+    public void suggestNomination(Movie movie, int priority) {
         if (priority == 1)
         {
-            nominatedMovies.add(0, movie); // Add movie to the beginning of the list
+            nominatedMovies.add(0, movie); // Pridať film na začiatok zoznamu
         } else
         {
-            nominatedMovies.add(movie); // Add movie to the end of the list
+            nominatedMovies.add(movie); // Pridať film na koniec zoznamu
         }
     }
 
+    /**
+     * Vráti zoznam nominovaných filmov.
+     *
+     * @return Zoznam nominovaných filmov
+     */
     public List<Movie> getNominatedMovies() {
         return nominatedMovies;
     }
 
-
+    /**
+     * Uloží stav VotingRoom do súboru pomocou sérializácie.
+     */
     public void saveVotingRoom() {
         try (FileOutputStream fileOut = new FileOutputStream("voting.ser");
              ObjectOutputStream out = new ObjectOutputStream(fileOut))
@@ -188,6 +225,9 @@ public class VotingRoom implements Serializable {
         }
     }
 
+    /**
+     * Načíta stav VotingRoom zo súboru pomocou deserializácie.
+     */
     public void loadVotingRoom() {
         File file = new File("voting.ser");
         if (!file.exists())
@@ -210,40 +250,84 @@ public class VotingRoom implements Serializable {
         }
     }
 
+    /**
+     * Vráti aktuálny stav hlasovania.
+     *
+     * @return true ak hlasovanie prebieha, inak false
+     */
     public boolean getStatus() {
         return on_going;
     }
 
+    /**
+     * Nastaví stav hlasovania.
+     *
+     * @param status Nový stav hlasovania
+     */
     public void setStatus(boolean status) {
         this.on_going = status;
     }
 
+    /**
+     * Vráti zoznam režisérov.
+     *
+     * @return Zoznam režisérov
+     */
     public List<Director> getDirectors() {
         return directors;
     }
 
+    /**
+     * Vráti zoznam hercov.
+     *
+     * @return Zoznam hercov
+     */
     public List<Actor> getActors() {
         return actors;
     }
 
+    /**
+     * Pridá režiséra do zoznamu režisérov.
+     *
+     * @param director Režisér na pridanie
+     */
     public void addDirector(Director director) {
         directors.add(director);
     }
 
+    /**
+     * Pridá herca do zoznamu hercov.
+     *
+     * @param actor Herec na pridanie
+     */
     public void addActor(Actor actor) {
         actors.add(actor);
     }
 
-
+    /**
+     * Odstráni návrh filmu z nominovaných filmov.
+     *
+     * @param movie Film na odstránenie
+     */
     public void declineSuggestion(Movie movie) {
         nominatedMovies.remove(movie);
     }
 
+    /**
+     * Akceptuje návrh filmu a pridá ho do zoznamu filmov.
+     *
+     * @param movie Film na pridanie
+     */
     public void acceptSuggestion(Movie movie) {
         nominatedMovies.remove(movie);
         movies.add(movie);
     }
 
+    /**
+     * Vráti počet nominovaných filmov.
+     *
+     * @return Počet nominovaných filmov
+     */
     public int getNominationCount() {
         int count = 0;
         for (Movie movie : nominatedMovies)
@@ -253,17 +337,36 @@ public class VotingRoom implements Serializable {
         return count;
     }
 
+    /**
+     * Pridá pozorovateľa do zoznamu.
+     *
+     * @param observer Pozorovateľ na pridanie
+     */
     public void addObserver(VotingObserver observer) {
         observers.add(observer);
     }
-    public Winners getWinners(){
+
+    /**
+     * Vráti zoradené polia a výhercov hlasovania.
+     *
+     * @return zoradené polia a výhercov hlasovania
+     */
+    public Winners getWinners() {
         return new Winners(movies, actors, directors);
     }
 
+    /**
+     * Odstráni pozorovateľa zo zoznamu.
+     *
+     * @param observer Pozorovateľ na odstránenie
+     */
     public void removeObserver(VotingObserver observer) {
         observers.remove(observer);
     }
 
+    /**
+     * Upozorní všetkých pozorovateľov na zmeny.
+     */
     public void notifyObservers() {
         for (VotingObserver observer : observers)
         {
@@ -271,19 +374,16 @@ public class VotingRoom implements Serializable {
         }
     }
 
-    //sorting and returning winners of the voting using lambda expression
-
-
+    /**
+     * Reštartuje hlasovanie tým, že odstráni súbor so sérializovanými dátami, ak existuje.
+     */
     public void restartVoting() {
         File fileToDelete = new File("voting.ser");
 
-        // Check if the file exists
         if (fileToDelete.exists())
         {
-            // Attempt to delete the file
             boolean isDeleted = fileToDelete.delete();
 
-            // Check if the file was successfully deleted
             if (isDeleted)
             {
                 System.out.println("Voting was restarted successfuly! :)");
@@ -297,7 +397,9 @@ public class VotingRoom implements Serializable {
         }
     }
 
-    //this class manages the sorting and returning winners in each category and is nested class
+    /**
+     * Vnútorná trieda Winners zodpovedá za správu a zisťovanie víťazov v rôznych kategóriách.
+     */
     public class Winners {
         private List<Movie> movies;
         private List<Actor> actors;
@@ -309,18 +411,33 @@ public class VotingRoom implements Serializable {
             this.directors = directors;
         }
 
+        /**
+         * Vráti zoznam filmov zoradený podľa počtu hlasov.
+         *
+         * @return Zoznam zoradených filmov
+         */
         public List<Movie> getWinnersMovies() {
             List<Movie> sortedMovies = new ArrayList<>(movies);
             Collections.sort(sortedMovies, (a, b) -> Integer.compare(b.getVotes(), a.getVotes()));
             return sortedMovies;
         }
 
+        /**
+         * Vráti zoznam hercov zoradený podľa počtu hlasov.
+         *
+         * @return Zoznam zoradených hercov
+         */
         public List<Actor> getWinnersActors() {
             List<Actor> sortedActors = new ArrayList<>(actors);
             Collections.sort(sortedActors, (a, b) -> Integer.compare(b.getVotes(), a.getVotes()));
             return sortedActors;
         }
 
+        /**
+         * Vráti zoznam režisérov zoradený podľa počtu hlasov.
+         *
+         * @return Zoznam zoradených režisérov
+         */
         public List<Director> getWinnersDirectors() {
             List<Director> sortedDirectors = new ArrayList<>(directors);
             Collections.sort(sortedDirectors, (a, b) -> Integer.compare(b.getVotes(), a.getVotes()));

@@ -24,6 +24,12 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
+
+/**
+ * Trieda AdminScene poskytuje grafické rozhranie pre administrátora hlasovacieho systému.
+ * Administrátor môže pridať filmy do hlasovania, sledovať priebeh hlasovania, zastaviť hlasovanie
+ * alebo sa odhlásiť z aplikácie. Scéna obsahuje rôzne grafické prvky ako tlačidlá, grafy a kombinované zoznamy.
+ */
 public class AdminScene extends Scene {
     private Button addMovie = new Button("Add movies");
     private Button startNew = new Button("Stop ongoing voting");
@@ -39,6 +45,18 @@ public class AdminScene extends Scene {
 
     private ComboBox<String> graphSelector;
 
+    /**
+     * Konštruktor pre triedu AdminScene inicializuje grafické prvky a nastavuje
+     * akcie pre tlačidlá a iné interaktívne komponenty. Scéna umožňuje administrátorovi
+     * riadiť hlasovanie, sledovať priebežné výsledky a zasahovať do procesu podľa potreby.
+     * <p>
+     * Scéna obsahuje dynamické prvky ako grafy, ktoré sa aktualizujú v reálnom čase podľa
+     * stavu v hlasovacej miestnosti a odozvy od používateľov.
+     *
+     * @param stage      hlavné okno aplikácie, kde bude scéna zobrazená.
+     * @param votingRoom referencia na objekt VotingRoom, ktorý spravuje hlasovací proces.
+     * @param admin      aktuálne prihlásený administrátor.
+     */
     public AdminScene(Stage stage, VotingRoom votingRoom, Admin admin) {
         //sets the pane and the main elements
         super(new AnchorPane(), 500, 600, Color.LIGHTGRAY);

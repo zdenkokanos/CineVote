@@ -70,12 +70,14 @@ public class MessageScene extends Scene {
 
         submitDonation.setOnAction(e -> {
             AccountItem selectedItem = accountDropdown.getValue();
-            if (accountDropdown.getSelectionModel().isEmpty() || "Choose account".equals(accountDropdown.getValue())) {
+            if (accountDropdown.getSelectionModel().isEmpty() || "Choose account".equals(accountDropdown.getValue()))
+            {
                 errorMessageLabel.setText("Please select an account to donate to.");
                 return; // Exit the method early if no account is selected
             }
             String donationAmountText = donationInput.getText();
-            try {
+            try
+            {
                 float donationAmount = Float.parseFloat(donationAmountText);
                 Payable selectedAccount = selectedItem.getPayable();
 
@@ -86,21 +88,26 @@ public class MessageScene extends Scene {
                 confirmDialog.setContentText("This action cannot be undone.");
 
                 Optional<ButtonType> result = confirmDialog.showAndWait();
-                if (result.isPresent() && result.get() == ButtonType.OK) {
+                if (result.isPresent() && result.get() == ButtonType.OK)
+                {
                     // User confirmed the donation
-                    if (donationAmount <= voter.getBalance()) {
-                        voter.pay(selectedAccount.getAccount(), donationAmount);
+                    if (donationAmount <= voter.getBalance())
+                    {
+                        voter.pay(selectedAccount.getAccount(), donationAmount, voter.getBankAccount());
                         currentBalance.setText("Your current balance is: " + String.format("%.2f", voter.getBalance()) + " €");
                         errorMessageLabel.setText("Donation successful.");
                         votingRoom.saveVotingRoom();
-                    } else {
+                    } else
+                    {
                         errorMessageLabel.setText("Insufficient balance to make the donation.");
                     }
-                } else {
+                } else
+                {
                     // User cancelled the donation
                     errorMessageLabel.setText("Donation cancelled.");
                 }
-            } catch (NumberFormatException ex) {
+            } catch (NumberFormatException ex)
+            {
                 errorMessageLabel.setText("Invalid donation amount: " + donationAmountText); //display error under button
             }
             System.out.println("button to pay was hit");

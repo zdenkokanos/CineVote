@@ -27,10 +27,27 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 
+/**
+ * Trieda VotingScene poskytuje grafické rozhranie pre hlasovanie. Umožňuje voličom hlasovať
+ * za filmy, režisérov a hercov. Scéna obsahuje rozbaľovacie panely pre každú kategóriu
+ * a radiobuttony pre výber možností hlasovania.
+ */
 public class VotingScene extends Scene {
     private Button vote = new Button("Vote");
     private String css = this.getClass().getResource("votingScene.css").toExternalForm();
 
+    /**
+     * Konštruktor triedy VotingScene inicializuje a nastavuje komponenty potrebné pre hlasovanie.
+     * Tento konštruktor vytvára užívateľské rozhranie obsahujúce radiobuttony pre každú kategóriu
+     * a spracováva logiku pre odoslanie hlasov.
+     *
+     * Scéna je vybavená scroll panelom, čo umožňuje voličovi pohodlne pristupovať k veľkému
+     * počtu hlasovacích možností bez potreby meniť veľkosť okna.
+     *
+     * @param votingRoom objekt hlasovacej miestnosti, kde sú uložené všetky filmy, režiséri a herci.
+     * @param voter objekt reprezentujúci voliča, ktorý práve hlasuje.
+     * @param stage hlavné okno, na ktorom sa scéna zobrazuje.
+     */
     public VotingScene(VotingRoom votingRoom, People voter, Stage stage) {
         //sets the pane and the main elements
         super(new ScrollPane(), 500, 600, Color.LIGHTGRAY);
