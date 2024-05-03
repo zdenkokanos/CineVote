@@ -20,6 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Trieda MessageScene poskytuje scénu pre zobrazovanie správ používateľom a spracovanie darovacích príspevkov.
+ * Umožňuje užívateľom vykonať finančné príspevky na účty ostatných hercov alebo režisérov zoznamu.
+ */
+
 public class MessageScene extends Scene {
     private String css = this.getClass().getResource("main.css").toExternalForm();
     private Button backToLogin = new Button("Back to login?");
@@ -28,6 +33,13 @@ public class MessageScene extends Scene {
     private Button submitDonation = new Button("Submit");
     private Label errorMessageLabel = new Label("");
 
+    /**
+     * Konštruktor pre triedu MessageScene, ktorý inicializuje a nastavuje
+     * komponenty potrebné pre zobrazenie správ a spracovanie posielania peňazí.
+     * @param message správa, ktorá sa zobrazuje užívateľovi
+     * @param voter objekt voliča, ktorý interaguje so scénou
+     * @param votingRoom referencia na objekt hlasovacej miestnosti
+     */
     public MessageScene(String message, People voter, VotingRoom votingRoom) {
         // Sets the pane and the main elements
         super(new VBox(), 500, 600, Color.LIGHTGRAY);
@@ -128,6 +140,13 @@ public class MessageScene extends Scene {
         setOnKeyPressed(enterEventHandler);
     }
 
+    /**
+     * Alternatívny konštruktor pre triedu MessageScene, ktorý sa používa,
+     * keď nie je potrebné spracovávať darovacie príspevky (napríklad keď volič nemá bankový účet).
+     *
+     * @param message správa, ktorá sa zobrazuje užívateľovi
+     * @param votingRoom referencia na objekt hlasovacej miestnosti
+     */
     public MessageScene(String message, VotingRoom votingRoom) {
         super(new VBox(), 500, 600, Color.LIGHTGRAY);
         VBox vbox = (VBox) getRoot();

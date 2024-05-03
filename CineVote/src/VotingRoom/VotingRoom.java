@@ -329,12 +329,7 @@ public class VotingRoom implements Serializable {
      * @return Počet nominovaných filmov
      */
     public int getNominationCount() {
-        int count = 0;
-        for (Movie movie : nominatedMovies)
-        {
-            count++;
-        }
-        return count;
+        return nominatedMovies.size();
     }
 
     /**

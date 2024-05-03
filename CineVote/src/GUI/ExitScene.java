@@ -11,12 +11,25 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+/**
+ * Trieda ExitScene poskytuje scénu pre záverečné interakcie s používateľom po úpravách alebo akciách v aplikácii.
+ * Umožňuje používateľom pokračovať v používaní aplikácie, odhlásiť sa alebo ukončiť aplikáciu.
+ */
 public class ExitScene extends Scene {
     private String css = this.getClass().getResource("main.css").toExternalForm();
     private Button continueB = new Button("Continue");
     private Button logOut = new Button("Log out");
     private Button exitB = new Button("Exit");
 
+
+    /**
+     * Konštruktor pre triedu ExitScene, ktorý inicializuje a nastavuje
+     * komponenty potrebné pre interakciu s používateľom po dokončení akcie v aplikácii.
+     *
+     * @param votingRoom objekt hlasovacej miestnosti, kde sú uložené dáta a nastavenia
+     * @param stage      hlavné okno, na ktorom sa scéna zobrazuje
+     * @param voter      objekt aktuálne prihláseného používateľa
+     */
     public ExitScene(VotingRoom votingRoom, Stage stage, People voter) {
         //sets the pane and the main elements
         super(new VBox(), 500, 500, Color.LIGHTGRAY);
@@ -47,6 +60,6 @@ public class ExitScene extends Scene {
         logOut.setOnAction(e -> { //this buttons lets you logOut and log In as a different user so you don't have to log back on
             stage.setScene(new LogInScene(stage, votingRoom));
         });
-        vbox.getChildren().addAll(messageLabel, continueB, logOut,exitB);
+        vbox.getChildren().addAll(messageLabel, continueB, logOut, exitB);
     }
 }

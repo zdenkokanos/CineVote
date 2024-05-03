@@ -17,6 +17,10 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
+/**
+ * Trieda AddMovieScene poskytuje scénu pre pridávanie alebo nominovanie filmov v rámci aplikácie.
+ * Umožňuje používateľom zadávať informácie o filme, režisérovi a hlavnom hercovi.
+ */
 public class AddMovieScene extends Scene {
     private TextField movieName = new TextField();
     private TextField directorName = new TextField();
@@ -27,6 +31,15 @@ public class AddMovieScene extends Scene {
     private Button submit = new Button("Submit");
     private String css = this.getClass().getResource("main.css").toExternalForm();
 
+    /**
+     * Konštruktor pre triedu AddMovieScene, ktorý inicializuje komponenty a nastavuje správanie scény.
+     * Táto scéna umožňuje používateľom Middle class a Admin zadávať údaje potrebné pre nomináciu alebo návrh filmu.
+     *
+     * @param stage      hlavné okno, na ktorom sa scéna zobrazuje
+     * @param votingRoom referencia na objekt hlasovacej miestnosti, kde sa ukladajú filmy
+     * @param voter      objekt používateľa, ktorý vykonáva nomináciu alebo návrh filmu
+     * @param message    správa zobrazujúca sa na začiatku formulára, môže označovať kontext, v ktorom sa formulár používa
+     */
     public AddMovieScene(Stage stage, VotingRoom votingRoom, People voter, String message) {
         //sets the pane and the main elements
         super(new VBox(), 500, 600, Color.LIGHTGRAY);
@@ -81,20 +94,24 @@ public class AddMovieScene extends Scene {
                 errorMessageLabel.setText("Please fill in all fields.");
                 return;
             }
-            try {
+            try
+            {
                 int directorAgeText = Integer.parseInt(directorAgeTextStr);
                 int actorAgeText = Integer.parseInt(actorAgeTextStr);
                 int makeYearText = Integer.parseInt(makeYearTextStr);
 
-                if (voter instanceof Admin) {
+                if (voter instanceof Admin)
+                {
                     ((Admin) voter).nominate(movieNameText, directorNameText, directorAgeText, actorNameText, actorAgeText, makeYearText, votingRoom);
-                } else if (voter instanceof MiddleClass) {
+                } else if (voter instanceof MiddleClass)
+                {
                     ((MiddleClass) voter).suggest_nomination(movieNameText, directorNameText, directorAgeText, actorNameText, actorAgeText, makeYearText, votingRoom);
                 }
                 votingRoom.saveVotingRoom();
                 ExitScene exitScene = new ExitScene(votingRoom, stage, voter);
                 stage.setScene(exitScene);
-            } catch (NumberFormatException ex) {
+            } catch (NumberFormatException ex)
+            {
                 errorMessageLabel.setText("Please enter valid integer values for age and year.");
             }
 
@@ -102,7 +119,8 @@ public class AddMovieScene extends Scene {
 
         //lets you submit with hitting Enter Key
         EventHandler<KeyEvent> enterEventHandler = event -> {
-            if (event.getCode() == KeyCode.ENTER) {
+            if (event.getCode() == KeyCode.ENTER)
+            {
                 submit.fire(); // Trigger submit button action
             }
         };

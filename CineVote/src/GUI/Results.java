@@ -26,6 +26,11 @@ import javafx.stage.Stage;
 
 import java.util.List;
 
+/**
+ * Trieda Results zobrazuje grafické výsledky hlasovania v grafoch.
+ * Umožňuje používateľom zobraziť výsledky pre filmy, režisérov a hercov,
+ * a poskytuje možnosť reštartovať hlasovanie po poskytnutí hesla admina.
+ */
 public class Results extends Scene {
     private Observer votingRoomObserver;
     private BarChart<String, Number> barChartMovies;
@@ -36,6 +41,12 @@ public class Results extends Scene {
     private ComboBox<String> graphSelector;
     private Winners winners;
 
+    /**
+     * Konštruktor pre triedu Results, ktorý inicializuje grafické komponenty a nastavuje správanie tlačidiel.
+     * Vytvára grafy pre zobrazenie hlasovacích výsledkov a obsahuje logiku pre spustenie nového hlasovania.
+     * @param stage hlavné okno, na ktorom sa zobrazuje scéna
+     * @param votingRoom referencia na objekt hlasovacej miestnosti, ktorý obsahuje údaje o hlasovaní
+     */
     public Results(Stage stage, VotingRoom votingRoom) {
         super(new VBox(), 800, 600);
         VBox vBox = (VBox) getRoot();
@@ -156,7 +167,11 @@ public class Results extends Scene {
         });
     }
 
-    public static class DetailScene extends Scene {
+/**
+ * DetailScene je vnorená trieda v Results, ktorá poskytuje detailné tabuľkové zobrazenie výsledkov.
+ * Táto scéna zobrazuje mená a počet hlasov pre top 3 kandidátov v každej kategórii.
+ */
+    public class DetailScene extends Scene {
         private Winners winners;
         private Button graphView = new Button("Graph View");
 
