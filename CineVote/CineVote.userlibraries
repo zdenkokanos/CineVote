@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eclipse-userlibraries>
+  <library name="lib">
+    <archive path="/Users/zdenko_kanos/Documents/Programy/javafx-sdk-21.0.2/lib/javafx-swt.jar" />
+    <archive path="/Users/zdenko_kanos/Documents/Programy/javafx-sdk-21.0.2/lib/javafx.web.jar" />
+    <archive path="/Users/zdenko_kanos/Documents/Programy/javafx-sdk-21.0.2/lib/javafx.base.jar" />
+    <archive path="/Users/zdenko_kanos/Documents/Programy/javafx-sdk-21.0.2/lib/javafx.fxml.jar" />
+    <archive path="/Users/zdenko_kanos/Documents/Programy/javafx-sdk-21.0.2/lib/javafx.media.jar" />
+    <archive path="/Users/zdenko_kanos/Documents/Programy/javafx-sdk-21.0.2/lib/javafx.swing.jar" />
+    <archive path="/Users/zdenko_kanos/Documents/Programy/javafx-sdk-21.0.2/lib/javafx.controls.jar" />
+    <archive path="/Users/zdenko_kanos/Documents/Programy/javafx-sdk-21.0.2/lib/javafx.graphics.jar" />
+  </library>
+</eclipse-userlibraries>
+
