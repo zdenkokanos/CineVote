@@ -18,6 +18,7 @@ import javafx.stage.Stage;
  */
 public class SuggestNotificationScene extends Scene {
     private Button exit = new Button("Exit");
+    private String css = this.getClass().getResource("suggestion.css").toExternalForm();
 
     /**
      * Konštruktor pre triedu SuggestNotificationScene, ktorý inicializuje a nastavuje
@@ -29,7 +30,7 @@ public class SuggestNotificationScene extends Scene {
     public SuggestNotificationScene(VotingRoom votingRoom, Stage stage, Admin admin) {
         //sets the pane and the main elements
         super(new VBox(), 500, 600);
-
+        getStylesheets().add(css);
         // Create VBox to hold multiple boxes with text
         VBox container = (VBox) this.getRoot();
         container.setPadding(new Insets(10)); // Add padding to the container
@@ -51,6 +52,8 @@ public class SuggestNotificationScene extends Scene {
             AdminScene adminScene = new AdminScene(stage, votingRoom, admin);
             stage.setScene(adminScene);
         });
+        Insets buttonMargin = new Insets(10, 0, 0, 0);  // Top, Right, Bottom, Left margins
+        VBox.setMargin(exit, buttonMargin);
         container.getChildren().add(exit);
     }
 
@@ -66,29 +69,34 @@ public class SuggestNotificationScene extends Scene {
      */
     private VBox createMovieBox(Movie movie, VotingRoom votingRoom, Stage stage, VBox parentContainer) {
         Label label = new Label(movie.getTitle());
-        Button button1 = new Button("Accept");
-        Button button2 = new Button("Decline");
-        VBox box = new VBox(label, new HBox(button1, button2));
+        label.getStyleClass().add("movie-label");
 
+        Button acceptButton = new Button("Accept");
+        acceptButton.getStyleClass().add("accept-button");
+
+        Button declineButton = new Button("Decline");
+        declineButton.getStyleClass().add("decline-button");
+
+        HBox buttonBox = new HBox(10, acceptButton, declineButton); // Spacing between buttons
+        VBox box = new VBox(10, label, buttonBox); // Spacing between label and button box
+        box.setPadding(new Insets(10));
+        box.setStyle("-fx-background-color: white; -fx-border-color: #ccc; -fx-border-radius: 5px;");
+        box.getStyleClass().add("movie-box");
         //sets buttons on action
-        button1.setOnAction(e -> {
+        acceptButton.setOnAction(e -> {
             votingRoom.acceptSuggestion(movie);
             votingRoom.saveVotingRoom();
             parentContainer.getChildren().remove(box);
 
         });
 
-        button2.setOnAction(e -> {
+        declineButton.setOnAction(e -> {
             votingRoom.declineSuggestion(movie);
             votingRoom.saveVotingRoom();
             parentContainer.getChildren().remove(box);
 
         });
 
-        //adds some css styling
-        box.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
-        box.setSpacing(5);
-        box.setPadding(new Insets(5));
         return box;
     }
 }

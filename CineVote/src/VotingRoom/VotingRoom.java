@@ -132,7 +132,7 @@ public class VotingRoom implements Serializable {
         movies.add(new Movie("Fight Club", fincher, pitt, 1999));
         movies.add(new Movie("Forrest Gump", zemeckis, hanks, 1994));
         movies.add(new Movie("The Matrix", wachowski, reeves, 1999));
-        movies.add(new Movie("The Lord of the Rings: The Fellowship of the Ring", jackson, wood, 2001));
+        movies.add(new Movie("The Lord of the Rings", jackson, wood, 2001));
     }
 
     /**

@@ -5,6 +5,7 @@ import Voters.Voters;
 import VotingRoom.VotingRoom;
 import VotingRoom.People;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -26,8 +27,8 @@ import java.util.Optional;
  */
 
 public class MessageScene extends Scene {
-    private String css = this.getClass().getResource("main.css").toExternalForm();
-    private Button backToLogin = new Button("Back to login?");
+    private String css = this.getClass().getResource("bank.css").toExternalForm();
+    private Button backToLogin = new Button("Log Out");
     private TextField donationInput = new TextField();
     private ComboBox<AccountItem> accountDropdown = new ComboBox<>();
     private Button submitDonation = new Button("Submit");
@@ -51,7 +52,7 @@ public class MessageScene extends Scene {
         thankYouLabel.setId("message");
         Label currentBalance = new Label("Your current balance is: " + voter.getBalance() + " €");
         errorMessageLabel.setTextFill(Color.RED);
-
+        errorMessageLabel.getStyleClass().add("error-message");
         // Set the width of the donation input
         donationInput.setPrefWidth(100); // Adjust the width as needed
         // Set up the account dropdown
@@ -107,27 +108,40 @@ public class MessageScene extends Scene {
                     {
                         voter.pay(selectedAccount.getAccount(), donationAmount, voter.getBankAccount());
                         currentBalance.setText("Your current balance is: " + String.format("%.2f", voter.getBalance()) + " €");
+                        errorMessageLabel.setTextFill(Color.GREEN);
                         errorMessageLabel.setText("Donation successful.");
                         votingRoom.saveVotingRoom();
                     } else
                     {
+                        errorMessageLabel.setTextFill(Color.RED);
                         errorMessageLabel.setText("Insufficient balance to make the donation.");
                     }
                 } else
                 {
-                    // User cancelled the donation
+                    errorMessageLabel.setTextFill(Color.RED);
                     errorMessageLabel.setText("Donation cancelled.");
                 }
             } catch (NumberFormatException ex)
             {
+                errorMessageLabel.setTextFill(Color.RED);
                 errorMessageLabel.setText("Invalid donation amount: " + donationAmountText); //display error under button
             }
             System.out.println("button to pay was hit");
         });
 
+        HBox hbox = new HBox(accountDropdown, errorMessageLabel);
+        hbox.setAlignment(Pos.CENTER_LEFT);
+
+        VBox vButtons = new VBox();
+        Insets buttonInsets = new Insets(10, 0, 0,0);
+        submitDonation.setId("submit");
+        vButtons.setAlignment(Pos.CENTER);
+        VBox.setMargin(submitDonation, buttonInsets);
+        VBox.setMargin(backToLogin, buttonInsets);
+        vButtons.getChildren().addAll(submitDonation ,backToLogin);
 
         // Add elements to the pane
-        vbox.getChildren().addAll(thankYouLabel, currentBalance, donationInput, new HBox(accountDropdown, submitDonation, errorMessageLabel), backToLogin);
+        vbox.getChildren().addAll(thankYouLabel, currentBalance, donationInput, hbox, vButtons);
 
         // Lets you move back to login just by hitting enter button
         EventHandler<KeyEvent> enterEventHandler = event -> {

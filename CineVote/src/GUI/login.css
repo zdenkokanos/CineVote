@@ -14,3 +14,40 @@
 .button{
     -fx-cursor: hand;
 }
+
+.text-field{
+    -fx-padding: 8px 12px; /* Top, right, bottom, left padding */
+    -fx-border-color: gray; /* Border color */
+    -fx-border-width: 2px; /* Border width */
+    -fx-border-radius: 5px; /* Rounded corners */
+    -fx-background-color: #fff; /* Background color */
+    -fx-background-radius: 5px; /* Background rounded corners matching border */
+    -fx-font-size: 14px; /* Text font size */
+    -fx-font-family: "Arial"; /* Font family */
+}
+
+.text-field:focused {
+    -fx-border-color: #90caf9; /* Border color when the text field is focused */
+}
+
+.text-field:hover {
+    -fx-background-color: #e8e8e8; /* Slightly darker background on hover */
+}
+
+#loginBtn{
+    -fx-padding: 5px 20px;  /* Top and Bottom padding 10px, Right and Left padding 20px */
+    -fx-background-color: #8B4513; /* Dark gray background */
+    -fx-text-fill: #ffffff;  /* White text color */
+    -fx-font-weight: bold;   /* Bold font */
+    -fx-border-width: 2px;   /* Border width */
+    -fx-border-radius: 5px;  /* Border radius for rounded corners */
+    -fx-background-radius: 5px; /* Background radius for rounded background */
+    -fx-transition: all 0.3s ease; /* Transition effect for smooth scaling */
+    -fx-transform-origin: center center; /* Ensures the scaling is centered */
+}
+
+#loginBtn:hover{
+    -fx-background-color: #633d10;
+    -fx-scale-x: 1.1; /* Scale the button to 110% of its original size horizontally */
+    -fx-scale-y: 1.1; /* Scale the button to 110% of its original size vertically */
+}

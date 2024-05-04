@@ -19,6 +19,7 @@ import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
 
 import static CanBeVoted.BankAccount.createAccount;
+
 /**
  * Trieda LogInScene poskytuje užívateľské rozhranie pre prihlásenie do hlasovacieho systému
  * a registráciu nových užívateľov. Umožňuje užívateľom zadať svoje používateľské meno a heslo na prihlásenie,
@@ -40,7 +41,7 @@ public class LogInScene extends Scene {
      * Vytvorí všetky potrebné grafické komponenty a pridá ich do scény.
      *
      * @param primaryStage hlavné okno aplikácie, kde bude scéna zobrazená
-     * @param votingRoom referencia na objekt VotingRoom, ktorý obsahuje údaje o hlasovacích voličoch a procesoch
+     * @param votingRoom   referencia na objekt VotingRoom, ktorý obsahuje údaje o hlasovacích voličoch a procesoch
      */
     public LogInScene(Stage primaryStage, VotingRoom votingRoom) {
         //sets the pane and the main elements
@@ -61,6 +62,9 @@ public class LogInScene extends Scene {
         gridPane.setVgap(10);
         gridPane.setAlignment(Pos.CENTER); // Center the GridPane
 
+        logIn.setId("loginBtn");
+        register.setId("loginBtn");
+
         //login input layout
         gridPane.add(new Label("Username:"), 0, 0);
         gridPane.add(usernameInput, 1, 0);
@@ -79,48 +83,61 @@ public class LogInScene extends Scene {
 
         //set buttons on action
         logIn.setOnAction(e -> {
-            for (People voter : votingRoom.getVoters())
+            try
             {
-                // Check if the entered username and password match the voter's credentials
-                if (voter.getUsername().equals(usernameInput.getText()) && voter.getPassword().equals(passwordInput.getText()))
+                if (usernameInput.getText().isEmpty() && passwordInput.getText().isEmpty())
                 {
-                    if (voter.getVoted())
-                    {
-                        if (voter instanceof Admin)
-                        {
-                            AdminScene adminScene = new AdminScene(primaryStage, votingRoom, (Admin) voter);
-                            primaryStage.setScene(adminScene);
-                            break;
-                        } else if (voter instanceof MiddleClass)
-                        {
-                            AddMovieScene addMovieScene = new AddMovieScene(primaryStage, votingRoom, voter, "Suggest movie nomination");
-                            primaryStage.setScene(addMovieScene);
-                            break;
-                        } else
-                        {
-                            if (voter.getBankAccount() != null)
-                            {
-                                MessageScene alreadyVotedScene = new MessageScene("You have already voted!", voter, votingRoom);
-                                primaryStage.setScene(alreadyVotedScene);
-                            } else
-                            {
-                                MessageScene alreadyVotedScene = new MessageScene("You have already voted!", votingRoom);
-                                primaryStage.setScene(alreadyVotedScene);
-                            }
-                            break;
-                        }
-                    } else
-                    {
-                        VotingScene votingScene = new VotingScene(votingRoom, voter, primaryStage);
-                        primaryStage.setScene(votingScene); // If match found, switch to voting scene
-                    }
-                    break; // Exit the loop since a match is found
+                    throw new BlankInputException("Username and password fields cannot be blank.");
                 } else
                 {
-                    errorMessageLabel.setText("Incorrect username or password.");
+                    for (People voter : votingRoom.getVoters())
+                    {
+                        // Check if the entered username and password match the voter's credentials
+                        if (voter.getUsername().equals(usernameInput.getText()) && voter.getPassword().equals(passwordInput.getText()))
+                        {
+                            if (voter.getVoted())
+                            {
+                                if (voter instanceof Admin)
+                                {
+                                    ChoiceScene choiceScene = new ChoiceScene(primaryStage, votingRoom, voter);
+                                    primaryStage.setScene(choiceScene);
+                                    break;
+                                } else if (voter instanceof MiddleClass)
+                                {
+                                    ChoiceScene choiceScene = new ChoiceScene(primaryStage, votingRoom, voter);
+                                    primaryStage.setScene(choiceScene);
+                                    break;
+                                } else
+                                {
+                                    if (voter.getBankAccount() != null)
+                                    {
+                                        MessageScene alreadyVotedScene = new MessageScene("You have already voted!", voter, votingRoom);
+                                        primaryStage.setScene(alreadyVotedScene);
+                                    } else
+                                    {
+                                        MessageScene alreadyVotedScene = new MessageScene("You have already voted!", votingRoom);
+                                        primaryStage.setScene(alreadyVotedScene);
+                                    }
+                                    break;
+                                }
+                            } else
+                            {
+                                //VotingScene votingScene = new VotingScene(votingRoom, voter, primaryStage);
+                                //primaryStage.setScene(votingScene); // If match found, switch to voting sceneň
+                                ChoiceScene choiceScene = new ChoiceScene(primaryStage, votingRoom, voter);
+                                primaryStage.setScene(choiceScene);
+                            }
+                            break; // Exit the loop since a match is found
+                        } else
+                        {
+                            errorMessageLabel.setText("Incorrect username or password.");
+                        }
+                    }
                 }
+            } catch (BlankInputException ex)
+            {
+                errorMessageLabel.setText(ex.getMessage());
             }
-
         });
 
         register.setOnAction(e -> {
@@ -157,8 +174,8 @@ public class LogInScene extends Scene {
                                 // User clicked yes, proceed with registration
                                 LowerClass voter = new LowerClass(username, password, createAccount(100));
                                 votingRoom.addVoter(voter);
-                                VotingScene votingScene = new VotingScene(votingRoom, voter, primaryStage);
-                                primaryStage.setScene(votingScene);
+                                ChoiceScene choiceScene = new ChoiceScene(primaryStage, votingRoom, voter);
+                                primaryStage.setScene(choiceScene);
                             } else if (response == ButtonType.NO)
                             {
                                 LowerClass voter = new LowerClass(username, password);

@@ -29,7 +29,9 @@ public class AddMovieScene extends Scene {
     private TextField actorAge = new TextField();
     private TextField makeYear = new TextField();
     private Button submit = new Button("Submit");
-    private String css = this.getClass().getResource("main.css").toExternalForm();
+    private Button logOut = new Button("Log Out");
+    private Button goBack = new Button("Exit");
+    private String css = this.getClass().getResource("addMovieCSS.css").toExternalForm();
 
     /**
      * Konštruktor pre triedu AddMovieScene, ktorý inicializuje komponenty a nastavuje správanie scény.
@@ -44,8 +46,10 @@ public class AddMovieScene extends Scene {
         //sets the pane and the main elements
         super(new VBox(), 500, 600, Color.LIGHTGRAY);
         VBox vBox = (VBox) getRoot();
+        vBox.getStyleClass().add("background");
         GridPane gridPane = new GridPane();
         Label messageLabel = new Label(message);
+        getStylesheets().add(css);
         messageLabel.setId("messageLabel");
         vBox.getChildren().add(messageLabel);
         vBox.getChildren().add(gridPane);
@@ -55,7 +59,7 @@ public class AddMovieScene extends Scene {
         gridPane.setHgap(10); // Horizontal gap between elements
         gridPane.setPadding(new Insets(80, 0, 0, 0));
         vBox.setPadding(new Insets(30, 0, 0, 0));
-        getStylesheets().add(css);
+
 
 
         // Add labels and text fields to the grid pane
@@ -126,6 +130,26 @@ public class AddMovieScene extends Scene {
         };
 
         setOnKeyPressed(enterEventHandler);
+
+        goBack.setId("exit");
+        logOut.setId("exit");
+
+        goBack.setOnAction(e->{
+            AdminScene adminScene = new AdminScene(stage, votingRoom, (Admin) voter);
+            stage.setScene(adminScene);
+        });
+
+        logOut.setOnAction(e->{
+            LogInScene logInScene = new LogInScene(stage, votingRoom);
+            stage.setScene(logInScene);
+        });
+
+        if(voter instanceof Admin){
+            vBox.getChildren().add(goBack);
+        }
+        else{
+            vBox.getChildren().add(logOut);
+        }
     }
 }
 

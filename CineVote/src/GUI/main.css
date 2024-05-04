@@ -12,9 +12,6 @@
     -fx-cursor: hand;
 }
 
-.button:hover{
-    -fx-background-color: red;
-}
 
 #messageLabel{
     -fx-font-size: 20px;

@@ -15,7 +15,6 @@ public class Director extends CanBeVoted implements Serializable, Payable, Peopl
     private String password;
     private int age;
     private boolean voted;
-
     private BankAccount bankAccount;
 
     /**

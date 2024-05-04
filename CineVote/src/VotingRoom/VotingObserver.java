@@ -30,5 +30,5 @@ public interface VotingObserver {
      * @return Séria dát pre BarChart, obsahujúca názvy a príslušné počty hlasov alebo iné numerické hodnoty
      * @param <T> Typ elementu, ktorý definuje, aký druh objektov je spracovaný
      */
-    public <T extends Votable> XYChart.Series<String, Number> update(List<T> list, BarChart<String, Number> barChart);
+    <T extends Votable> XYChart.Series<String, Number> update(List<T> list, BarChart<String, Number> barChart);
 }

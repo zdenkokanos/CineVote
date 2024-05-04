@@ -156,7 +156,7 @@ public class VotingScene extends Scene {
             } else
             {
                 errorMessageLabel.setText("You have to choose from each category!");
-                PauseTransition pause = new PauseTransition(Duration.seconds(0.25)); //makes smoother transition showing the error message
+                PauseTransition pause = new PauseTransition(Duration.seconds(0.2)); //makes smoother transition showing the error message
                 pause.setOnFinished(event -> {
                     if (selectedRadioButtonMovie == null)
                     {

@@ -1,0 +1,97 @@
+#buttons {
+    -fx-padding: 10px 20px;  /* Top and Bottom padding 10px, Right and Left padding 20px */
+    -fx-min-width: 150px;    /* Minimum width of the button */
+    -fx-max-width: 150px;    /* Maximum width of the button - ensures consistency */
+    -fx-pref-width: 150px;   /* Preferred width of the button */
+    -fx-background-color: #8B4513; /* Dark gray background 8a6232*/
+    -fx-text-fill: #ffffff;  /* White text color */
+    -fx-font-weight: bold;   /* Bold font */
+    -fx-border-width: 2px;   /* Border width */
+    -fx-border-radius: 5px;  /* Border radius for rounded corners */
+    -fx-background-radius: 5px; /* Background radius for rounded background */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0); /* Shadow effect */
+    -fx-transition: all 0.3s ease; /* Transition effect for smooth scaling */
+    -fx-transform-origin: center center; /* Ensures the scaling is centered */
+}
+
+#Ebuttons{
+    -fx-padding: 10px 20px;  /* Top and Bottom padding 10px, Right and Left padding 20px */
+    -fx-min-width: 150px;    /* Minimum width of the button */
+    -fx-max-width: 150px;    /* Maximum width of the button - ensures consistency */
+    -fx-pref-width: 150px;   /* Preferred width of the button */
+    -fx-background-color: #f44336; /* Dark gray background 8a6232*/
+    -fx-text-fill: #ffffff;  /* White text color */
+    -fx-font-weight: bold;   /* Bold font */
+    -fx-border-width: 2px;   /* Border width */
+    -fx-border-radius: 5px;  /* Border radius for rounded corners */
+    -fx-background-radius: 5px; /* Background radius for rounded background */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0); /* Shadow effect */
+    -fx-transition: all 0.3s ease; /* Transition effect for smooth scaling */
+    -fx-transform-origin: center center; /* Ensures the scaling is centered */
+}
+
+#Lbuttons{
+    -fx-padding: 10px 20px;  /* Top and Bottom padding 10px, Right and Left padding 20px */
+    -fx-min-width: 150px;    /* Minimum width of the button */
+    -fx-max-width: 150px;    /* Maximum width of the button - ensures consistency */
+    -fx-pref-width: 150px;   /* Preferred width of the button */
+    -fx-background-color: #2196F3; /* Dark gray background 8a6232*/
+    -fx-text-fill: #ffffff;  /* White text color */
+    -fx-font-weight: bold;   /* Bold font */
+    -fx-border-width: 2px;   /* Border width */
+    -fx-border-radius: 5px;  /* Border radius for rounded corners */
+    -fx-background-radius: 5px; /* Background radius for rounded background */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0); /* Shadow effect */
+    -fx-transition: all 0.3s ease; /* Transition effect for smooth scaling */
+    -fx-transform-origin: center center; /* Ensures the scaling is centered */
+}
+
+#Lbuttons:hover{
+    -fx-background-color: #016991;
+    -fx-scale-x: 1.1; /* Scale the button to 110% of its original size horizontally */
+    -fx-scale-y: 1.1; /* Scale the button to 110% of its original size vertically */
+}
+
+#Ebuttons:hover{
+    -fx-background-color: #8a0f0f;
+    -fx-scale-x: 1.1; /* Scale the button to 110% of its original size horizontally */
+    -fx-scale-y: 1.1; /* Scale the button to 110% of its original size vertically */
+}
+
+.background{
+    -fx-background-image: url("//src/admin.jpeg");
+    -fx-background-size: cover;
+}
+
+.button{
+    -fx-cursor: hand;
+}
+
+#buttons:hover{
+    -fx-background-color: #633d10;
+    -fx-scale-x: 1.1; /* Scale the button to 110% of its original size horizontally */
+    -fx-scale-y: 1.1; /* Scale the button to 110% of its original size vertically */
+}
+
+.combo-box {
+    -fx-background-color: #ececec;
+    -fx-background-radius: 5px;
+    -fx-padding: 4px 15px 4px 5px;
+    -fx-cursor: hand;
+}
+
+.combo-box:hover, .combo-box .list-cell:hover {
+    -fx-background-color: #a1a1a1; /* Darker border on hover */
+}
+
+
+.combo-box .list-cell {
+    -fx-padding: 8px 10px;
+    -fx-text-fill: #333;
+}
+
+.combo-box .list-cell:hover{
+    -fx-background-color: #3090C7; /* Selection and hover background */
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}

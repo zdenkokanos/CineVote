@@ -16,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -32,7 +33,7 @@ import javafx.stage.Stage;
  */
 public class AdminScene extends Scene {
     private Button addMovie = new Button("Add movies");
-    private Button startNew = new Button("Stop ongoing voting");
+    private Button startNew = new Button("Stop voting");
     private Button notifications = new Button("");
     private StackPane notificationStackPane = new StackPane();
     private Button exit = new Button("Exit");
@@ -42,7 +43,7 @@ public class AdminScene extends Scene {
     private BarChart<String, Number> barChartMovies;
     private BarChart<String, Number> barChartActors;
     private BarChart<String, Number> barChartDirectors;
-
+    private String css = this.getClass().getResource("AdminSceneCSS.css").toExternalForm();
     private ComboBox<String> graphSelector;
 
     /**
@@ -59,10 +60,32 @@ public class AdminScene extends Scene {
      */
     public AdminScene(Stage stage, VotingRoom votingRoom, Admin admin) {
         //sets the pane and the main elements
-        super(new AnchorPane(), 500, 600, Color.LIGHTGRAY);
+        super(new AnchorPane(), 500, 600);
         AnchorPane root = (AnchorPane) getRoot();
         VBox vbox = new VBox();
         vbox.setAlignment(Pos.CENTER);
+        root.getStyleClass().add("background");
+
+        Insets buttonMargin = new Insets(0, 0, 10, 0);  // Top, Right, Bottom, Left margins
+        VBox.setMargin(addMovie, buttonMargin);
+        VBox.setMargin(startNew, buttonMargin);
+        VBox.setMargin(logOut, buttonMargin);
+        VBox.setMargin(exit, buttonMargin);
+        startNew.setId("buttons");
+        exit.setId("Ebuttons");
+        logOut.setId("Lbuttons");
+        addMovie.setId("buttons");
+        getStylesheets().add(css);
+
+        VBox leftButtons = new VBox(10);  // Spacing between buttons
+        VBox rightButtons = new VBox(10);
+
+        leftButtons.getChildren().addAll(addMovie, startNew);
+        rightButtons.getChildren().addAll(logOut, exit);
+
+        HBox buttonGroups = new HBox(50);  // Increase spacing to spread groups apart
+        buttonGroups.getChildren().addAll(leftButtons, rightButtons);
+        buttonGroups.setAlignment(Pos.CENTER);
 
         // Load the notification icon and its count of notifications in small red circle
         Image notificationImage = new Image(getClass().getResourceAsStream("/notificationIcon.png"));
@@ -72,6 +95,9 @@ public class AdminScene extends Scene {
             notifIcon.setFitWidth(24);
             notifIcon.setFitHeight(24);
             notifications.setGraphic(notifIcon);
+            notifications.setStyle("-fx-background-color: #ececec");
+            notifications.setOnMouseEntered(e -> notifications.setStyle("-fx-background-color: #a1a1a1;"));
+            notifications.setOnMouseExited(e -> notifications.setStyle("-fx-background-color: #ececec;"));
 
             Circle counterCircle = new Circle(5, Color.RED);
             Label counterLabel = new Label();
@@ -184,8 +210,12 @@ public class AdminScene extends Scene {
         });
 
         //adds the elements to the pane
-        vbox.getChildren().addAll(vBoxBarCharts, addMovie, startNew, logOut, exit);
+        Insets chartMargin = new Insets(20, 0, 0, 0);  // Top, Right, Bottom, Left margins
+        VBox.setMargin(vBoxBarCharts, chartMargin);
+        vbox.getChildren().add(vBoxBarCharts);
+        vbox.getChildren().add(buttonGroups);
         root.getChildren().addAll(vbox, notifications, notificationStackPane, graphSelector);
+
 
     }
 

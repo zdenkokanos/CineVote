@@ -39,6 +39,7 @@ public class Results extends Scene {
     private Button tableView = new Button("Table View");
     private Button startNewVote = new Button("Start new voting");
     private ComboBox<String> graphSelector;
+    private String css = this.getClass().getResource("AdminSceneCSS.css").toExternalForm();
     private Winners winners;
 
     /**
@@ -53,7 +54,7 @@ public class Results extends Scene {
         //Observer
         votingRoomObserver = new Observer(votingRoom);
         votingRoom.addObserver(votingRoomObserver);
-
+        getStylesheets().add(css);
         winners = votingRoom.getWinners();
         // Bar Chart Movies
         CategoryAxis xAxis = new CategoryAxis();
@@ -79,7 +80,8 @@ public class Results extends Scene {
         barChartDirectors = new BarChart<>(xAxis3, yAxis3);
         yAxis3.setLabel("Directors");
         barChartDirectors.setTitle("Voting has ended!");
-
+        tableView.setId("Lbuttons");
+        startNewVote.setId("buttons");
 
         // Initialize the graph selector ComboBox
         graphSelector = new ComboBox<>();
@@ -180,7 +182,8 @@ public class Results extends Scene {
             VBox root = (VBox) getRoot();
             root.setPadding(new Insets(25, 25, 25, 25));
             root.setAlignment(Pos.TOP_CENTER);
-
+            getStylesheets().add(css);
+            graphView.setId("Lbuttons");
             winners = votingRoom.getWinners();
             List<Movie> movies = winners.getWinnersMovies();
             List<Actor> actors = winners.getWinnersActors();
