@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
@@ -23,6 +24,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 
@@ -142,6 +144,15 @@ public class AdminScene extends Scene {
             System.out.println(votingRoom.getStatus());
             Results results = new Results(stage, votingRoom);
             stage.setScene(results);
+            // Here we get the bounds of the visual bounds of the screen
+            Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+
+            // Set the stage (window) to center of screen
+            stage.setX((primaryScreenBounds.getWidth() - 800) / 2);
+            stage.setY((primaryScreenBounds.getHeight() - 600) / 2);
+            stage.setWidth(800);
+            stage.setHeight(600);
+            stage.show();
         });
 
         logOut.setOnAction(e -> stage.setScene(new LogInScene(stage, votingRoom)));

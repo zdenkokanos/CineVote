@@ -23,6 +23,7 @@ public class ChoiceScene extends Scene {
         getStylesheets().add(css);
         VBox root = (VBox) this.getRoot();
         root.setAlignment(Pos.CENTER);
+        root.getStyleClass().add("background");
 
         if (voter instanceof MiddleClass)
         {

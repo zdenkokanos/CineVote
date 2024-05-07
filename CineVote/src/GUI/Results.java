@@ -55,6 +55,7 @@ public class Results extends Scene {
         votingRoomObserver = new Observer(votingRoom);
         votingRoom.addObserver(votingRoomObserver);
         getStylesheets().add(css);
+        vBox.getStyleClass().add("backgroundR");
         winners = votingRoom.getWinners();
         // Bar Chart Movies
         CategoryAxis xAxis = new CategoryAxis();
