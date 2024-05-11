@@ -16,10 +16,10 @@ public class Movie extends CanBeVoted implements Serializable, Votable {
     /**
      * Konštruktor pre vytvorenie objektu filmu s názvom, režisérom, hlavným hercom a rokom vydania.
      *
-     * @param title názov filmu
-     * @param director režisér filmu
+     * @param title     názov filmu
+     * @param director  režisér filmu
      * @param mainActor hlavný herec filmu
-     * @param year rok vydania filmu
+     * @param year      rok vydania filmu
      */
     public Movie(String title, Director director, Actor mainActor, int year) {
         this.title = title;
@@ -42,7 +42,7 @@ public class Movie extends CanBeVoted implements Serializable, Votable {
      *
      * @return názov filmu
      */
-    public String getName(){
+    public String getName() {
         return title;
     }
 
@@ -71,5 +71,13 @@ public class Movie extends CanBeVoted implements Serializable, Votable {
      */
     public int getReleaseYear() {
         return year;
+    }
+
+    public Actor getMainActor() {
+        return mainActor;
+    }
+
+    public Director getDirector(){
+        return director;
     }
 }

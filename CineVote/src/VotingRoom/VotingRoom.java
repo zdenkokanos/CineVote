@@ -17,7 +17,7 @@ public class VotingRoom implements Serializable {
     private List<Director> directors; // Zoznam režisérov
     private List<Actor> actors; // Zoznam hercov
     private List<Movie> nominatedMovies; // Zoznam filmov čakajúcich na schválenie
-    private boolean on_going; //Hovorí o priebehu hlasovania
+    private boolean onGoing; //Hovorí o priebehu hlasovania
 
     /**
      * Konštruktor pre VotingRoom inicializuje zoznamy a začína hlasovací proces.
@@ -28,7 +28,7 @@ public class VotingRoom implements Serializable {
         voters = new ArrayList<>();
         directors = new ArrayList<>();
         actors = new ArrayList<>();
-        this.on_going = true;
+        this.onGoing = true;
 
         nominatedMovies = new ArrayList<>(); // Filmy čakajúce na schválenie adminom
         populateMovies();
@@ -171,6 +171,7 @@ public class VotingRoom implements Serializable {
      */
     public void addMovie(Movie movie) {
         movies.add(movie);
+        notifyObservers();
     }
 
 
@@ -216,7 +217,7 @@ public class VotingRoom implements Serializable {
             out.writeObject(nominatedMovies);
             out.writeObject(actors);
             out.writeObject(directors);
-            out.writeBoolean(on_going);
+            out.writeBoolean(onGoing);
             System.out.println("VotingRoom object has been serialized and saved.");
 
         } catch (IOException e)
@@ -242,7 +243,7 @@ public class VotingRoom implements Serializable {
             nominatedMovies = (List<Movie>) in.readObject();
             actors = (List<Actor>) in.readObject();
             directors = (List<Director>) in.readObject();
-            this.on_going = in.readBoolean();
+            this.onGoing = in.readBoolean();
             System.out.println("VotingRoom object has been deserialized and loaded.");
         } catch (IOException | ClassNotFoundException e)
         {
@@ -256,7 +257,7 @@ public class VotingRoom implements Serializable {
      * @return true ak hlasovanie prebieha, inak false
      */
     public boolean getStatus() {
-        return on_going;
+        return onGoing;
     }
 
     /**
@@ -265,7 +266,7 @@ public class VotingRoom implements Serializable {
      * @param status Nový stav hlasovania
      */
     public void setStatus(boolean status) {
-        this.on_going = status;
+        this.onGoing = status;
     }
 
     /**
@@ -293,6 +294,7 @@ public class VotingRoom implements Serializable {
      */
     public void addDirector(Director director) {
         directors.add(director);
+        notifyObservers();
     }
 
     /**
@@ -302,6 +304,7 @@ public class VotingRoom implements Serializable {
      */
     public void addActor(Actor actor) {
         actors.add(actor);
+        notifyObservers();
     }
 
     /**
@@ -320,6 +323,8 @@ public class VotingRoom implements Serializable {
      */
     public void acceptSuggestion(Movie movie) {
         nominatedMovies.remove(movie);
+        actors.add(movie.getMainActor());
+        directors.add(movie.getDirector());
         movies.add(movie);
     }
 
@@ -360,7 +365,7 @@ public class VotingRoom implements Serializable {
     }
 
     /**
-     * Upozorní všetkých pozorovateľov na zmeny.
+     * Upozorní všetkých pozorovateľov na pridanie filmu, režiséra alebo herca.
      */
     public void notifyObservers() {
         for (VotingObserver observer : observers)

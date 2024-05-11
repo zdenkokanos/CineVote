@@ -63,11 +63,9 @@ public class MiddleClass extends Voters {
         }
         if (!foundDirector) {
             thisDirector = new Director(directorName, directorAge);
-            votingRoom.addDirector(thisDirector);
         }
         if (!foundActor) {
             thisActor = new Actor(actorName, actorAge);
-            votingRoom.addActor(thisActor);
         }
         Movie movie = new Movie(movieName, thisDirector, thisActor, makeYear);
         votingRoom.suggestNomination(movie, 0);

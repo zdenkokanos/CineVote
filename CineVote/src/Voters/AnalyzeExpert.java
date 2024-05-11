@@ -67,11 +67,9 @@ public class AnalyzeExpert extends MiddleClass {
         }
         if (!foundDirector) {
             thisDirector = new Director(directorName, directorAge);
-            votingRoom.addDirector(thisDirector);
         }
         if (!foundActor) {
             thisActor = new Actor(actorName, actorAge);
-            votingRoom.addActor(thisActor);
         }
         Movie movie = new Movie(movieName, thisDirector, thisActor, makeYear);
         votingRoom.suggestNomination(movie, 1);

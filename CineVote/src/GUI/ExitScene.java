@@ -12,6 +12,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+/**
+ * Trieda ExitScene poskytuje scénu, ktorá sa zobrazuje po dokončení určitých akcií v aplikácii.
+ * Ponúka používateľom možnosti pokračovať v interakcii, odhlásiť sa alebo ukončiť aplikáciu.
+ */
 public class ExitScene extends Scene {
     private String css = this.getClass().getResource("exit.css").toExternalForm();
     private Button continueB = new Button("Continue");
@@ -42,10 +46,12 @@ public class ExitScene extends Scene {
         });
         continueB.setOnAction(e -> {
             AddMovieScene addMovieScene = new AddMovieScene(stage, votingRoom, voter, "Suggest movie nomination");
-            if (voter instanceof Admin) {
+            if (voter instanceof Admin)
+            {
                 AdminScene adminScene = new AdminScene(stage, votingRoom, (Admin) voter);
                 stage.setScene(adminScene);
-            } else {
+            } else
+            {
                 stage.setScene(addMovieScene);
             }
         });

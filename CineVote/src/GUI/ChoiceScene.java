@@ -15,6 +15,11 @@ import javafx.scene.image.ImageView;
 import VotingRoom.*;
 import javafx.stage.Stage;
 
+/**
+ * Trieda ChoiceScene poskytuje grafické rozhranie, kde používatelia môžu vyberať
+ * medzi rôznymi možnosťami na základe ich role. Zobrazuje tlačidlá pre rôzne akcie
+ * ako sú hlasovanie, správa bankového účtu, navrhovanie filmov alebo prístup k administrátorským nastaveniam.
+ */
 public class ChoiceScene extends Scene {
     private String css = this.getClass().getResource("choice.css").toExternalForm();
 
